@@ -302,5 +302,8 @@ def accounting_baobiao():
     print(baobiaoxize)
     return render_template('accounting_baobiao.html', baobiao=baobiao,baobiaoxize = baobiaoxize)
 
+def testgit():
+    print("test")
+
 if __name__ == '__main__':
     app.run(debug=True)
