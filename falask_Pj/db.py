@@ -77,14 +77,31 @@ def show_allacount():
     return result
     conn.close()
 
+
 # cc 管理员_人员管理_查看人员
 def show_allperson():
     sql = "select * from  authority "
-    #print(sql)
+    # print(sql)
     cur.execute(sql)
     result = cur.fetchall()
     return result
     conn.close()
+
+
+# cc 管理员增加人员
+def cc_add_account(name, pwd, power):
+    sql_account = "insert into authority value ('%s','%s','%s' ) " % (name, pwd, power)
+    print(sql_account)
+    # 执行SQL语句
+    try:
+        cur.execute(sql_account)
+        # 提交到数据库执行
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(e)
+        conn.rollback()
+
 
 # Bill学生打卡记录
 def add_register(name):

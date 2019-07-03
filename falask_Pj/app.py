@@ -5,6 +5,8 @@ from db import *
 import config
 import os
 
+from templates.form import MyForm
+
 app = Flask(__name__)
 
 # 静态文件缓存时间设置
@@ -226,14 +228,41 @@ def show_account():
     # print(account)
     return render_template('adm_show_account.html',account =account)
 
-#cc 管理员 人员管理
+# cc 管理员 人员管理
 @app.route('/person_management',methods=['GET', 'POST'])
 def person_management():
     return render_template('person_management.html')
 
-#cc 人员管理_查看人员
+# cc 人员管理_查看人员
 @app.route('/show_person',methods=['GET', 'POST'])
 def show_person():
+    person = show_allperson()
+    print(person)
+    return render_template('person_management_show.html',person =person)
+
+# cc 人员管理_变更人员
+@app.route('/add_person',methods=['GET', 'POST'])
+def add_person():
+    form = MyForm()
+    if request.method == "POST":
+    #print(form.validate_on_submit())
+    #if form.validate_on_submit():
+        print(form.data['status'])
+        print("增加人员: ")
+        user = User()
+        user.name = request.form["name"]
+        user.materiel = request.form["materiel"]
+        user.product = request.form["product"]
+        user.purchase = request.form["purchase"]
+        power=111111
+        cc_add_account(user.name, user.pwd,power)
+        add_message = "添加成功"
+        return render_template('add_person.html', add_message=add_message)
+    return render_template('add_person.html',form=form)
+
+#cc 人员管理_权限管理
+@app.route('/show_person',methods=['GET', 'POST'])
+def change_person():
     person = show_allperson()
     print(person)
     return render_template('person_management_show.html',person =person)
@@ -301,9 +330,6 @@ def accounting_baobiao():
     baobiaoxize = show_baobiaoxize();
     print(baobiaoxize)
     return render_template('accounting_baobiao.html', baobiao=baobiao,baobiaoxize = baobiaoxize)
-
-def testgit():
-    print("test")
 
 if __name__ == '__main__':
     app.run(debug=True)
