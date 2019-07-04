@@ -4,6 +4,7 @@ from model import User
 from db import *
 import config
 import os
+from product_management import product_management
 
 app = Flask(__name__)
 
@@ -90,12 +91,10 @@ def show_register():
 def index_account():
     return render_template('account_index.html')
 
-
 # bill管理员
 @app.route('/admin')
 def index_adm():
     return render_template('adm_index.html')
-
 
 # bill登陆
 @app.route('/login/', methods=['GET', 'POST'])
@@ -301,6 +300,10 @@ def accounting_baobiao():
     baobiaoxize = show_baobiaoxize();
     print(baobiaoxize)
     return render_template('accounting_baobiao.html', baobiao=baobiao,baobiaoxize = baobiaoxize)
+
+# xijiawei
+# 添加“product_management.py”蓝本
+app.register_blueprint(product_management)
 
 if __name__ == '__main__':
     app.run(debug=True)
