@@ -12,10 +12,10 @@ product_management=Blueprint('product_management',__name__)
 
 # xijiawei
 # 成品管理
-@product_management.route('/product_manage', methods=['GET', 'POST'])
+@product_management.route('/product_management', methods=['GET', 'POST'])
 def show_products():
     products=show_allproducts()
-    return render_template('wms_product_outline.html',products=products)
+    return render_template('show_products.html',products=products)
 
 @product_management.route('/add_product', methods=['GET', 'POST'])
 def add_product():
@@ -29,5 +29,5 @@ def add_product():
         entryClerk=data['entryclerk']
         insert_into_productInfo(productCode,productType,client,1,1,1,1,1,entryClerk)
         products = show_allproducts()
-        return render_template('wms_product_outline.html',products=products)
+        return render_template('show_products.html',products=products)
     else:return render_template('add_product.html',form=addProductForm)
