@@ -90,7 +90,7 @@ def show_allperson():
 
 # cc 管理员增加人员
 def cc_add_account(name, pwd, power):
-    sql_account = "insert into authority value ('%s','%s','%s' ) " % (name, pwd, power)
+    sql_account = "INSERT INTO authority (personName,password,authority) VALUES ('%s','%s','%s' ) " % (name, pwd, power)
     print(sql_account)
     # 执行SQL语句
     try:

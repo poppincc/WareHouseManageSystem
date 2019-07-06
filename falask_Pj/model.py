@@ -25,9 +25,7 @@ class Student:
 
 
 class NewUser:
-    def __init__(self, name=None, pwd=None, materiel=None, product=None, purchase=None):
+    def __init__(self, name=None, pwd=None, authority=None):
         self.name = name
         self.pwd = 88888888
-        self.materiel = materiel
-        self.product = product
-        self.purchase = purchase
+        self.authority = authority

@@ -1,11 +1,11 @@
 from datetime import timedelta
 from flask import Flask, url_for, render_template, request, redirect, session
-from model import User
+from model import User, NewUser
 from db import *
 import config
 import os
 
-from templates.form import MyForm
+from templates.form import MyForm, SelectForm
 
 app = Flask(__name__)
 
@@ -110,7 +110,7 @@ def user_login():
         print("开始调用函数获取用户类型")
         Authority = login_Authority(username)
         print("Authority", Authority)
-        if Authority == '111111':
+        if Authority == '333':
             print("admin login!")
             return redirect(url_for('index_adm'))
             # return redirect(url_for('user_login'))
@@ -133,7 +133,7 @@ def user_login():
         # print(type(Authority))
         if loginCheck(user.id, user.pwd):
             session['username'] = user.id
-            if Authority == 111111:
+            if Authority == '333':
                 print("admin login!")
                 return redirect(url_for('index_adm'))
             elif Authority == 2:
@@ -240,27 +240,37 @@ def show_person():
     print(person)
     return render_template('person_management_show.html',person =person)
 
-# cc 人员管理_变更人员
+# cc 人员管理_增加人员
 @app.route('/add_person',methods=['GET', 'POST'])
 def add_person():
     form = MyForm()
     if request.method == "POST":
-    #print(form.validate_on_submit())
-    #if form.validate_on_submit():
-        print(form.data['status'])
+        # print(form.data['status'])
+        # print(form.data['statusPro'])
+        # print(form.data['statusPur'])
         print("增加人员: ")
-        user = User()
+        user = NewUser()
         user.name = request.form["name"]
-        user.materiel = request.form["materiel"]
-        user.product = request.form["product"]
-        user.purchase = request.form["purchase"]
-        power=111111
-        cc_add_account(user.name, user.pwd,power)
+        authority = form.data['status'] + "" + form.data['statusPro'] + "" + form.data['statusPur']
+        user.authority = authority
+        print(user.name, user.pwd, user.authority)
+        cc_add_account(user.name, user.pwd, user.authority)
         add_message = "添加成功"
-        return render_template('add_person.html', add_message=add_message)
+        return render_template('add_person.html', add_message=add_message, form=form)
     return render_template('add_person.html',form=form)
 
-#cc 人员管理_权限管理
+# cc 人员管理_删除人员
+@app.route('/delete_person',methods=['GET', 'POST'])
+def delete_person():
+    form = SelectForm()
+    if request.method == "POST":
+        print("删除人员: ")
+
+        delete_message = "添加成功"
+        return render_template('delete_person.html', delete_message=delete_message, form=form)
+    return render_template('delete_person.html', form=form)
+
+# cc 人员管理_权限管理
 @app.route('/show_person',methods=['GET', 'POST'])
 def change_person():
     person = show_allperson()
