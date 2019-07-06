@@ -241,6 +241,36 @@
                                     {{ form.entryclerk }}
                                 </div>
                             </div>
+
+                            <br/>                                                                          <!--br空行-->
+
+                            <div class="card-body">
+                                <table id="bootstrap-data-table" class="table table-striped table-bordered">
+                                <caption><h1>物料组成</h1></caption>
+                                <br/>
+                                    <thead>
+                                        <tr align="center" bgcolor="deepskyblue">
+                                            <th>物料编码</th>
+                                            <th>物料数量</th>
+                                            <th>物料单价</th>
+                                            <th>贴片数量</th>
+                                            <th>贴片单价</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for i in allclass %}
+                                            <tr>
+                                            <td>{{ i[0] }}</td>
+                                            <td>{{ i[1] }}</td>
+                                            <td>{{ i[1] }}</td>
+                                            <td>{{ i[1] }}</td>
+                                            <td>{{ i[1] }}</td>
+                                            </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
                             <br/>                                                                          <!--br空行-->
                             <div class="row">
                                 <div class="col-xs-12">
@@ -478,5 +508,31 @@ cript>
         // Bar Chart #flotBarChart End
     });
 </script>
+
+<!--下拉框-->
+<script>
+    $(".selectd").on('focus', function (e) {
+        var optionTxts = ['','足够的市场机会','持续增强组织能力','增强每日管理能力','赢客工具的上线和使用'];
+        var value = $(this).text();
+        var htmlText = "<select id='sel_BizPlan' style='width:100%; '>";
+        for(var i=0;i<optionTxts.length;i++){
+            //for(var option of optionTxts){
+            var optionTex = optionTxts[i];
+            if(optionTex== value){
+                htmlText = htmlText+"<option selected = 'true'>"+optionTex+"</option>";
+                /*if(value == optionTex){
+                htmlText = htmlText+"<option selected = 'true'>"+optionTex+"</option>";
+                */
+            }else{
+                htmlText = htmlText+"<option>"+optionTex+"</option>";
+            }
+        };		htmlText = htmlText+"</select>";
+        $(this).parent().append(htmlText);
+        $(this).hide();
+        $("#sel_BizPlan").focus();
+    });
+</script>
+
+
 </body>
 </html>
