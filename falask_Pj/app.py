@@ -265,8 +265,10 @@ def delete_person():
     form = SelectForm()
     if request.method == "POST":
         print("删除人员: ")
+        name = form.data['personName']
+        print(name)
 
-        delete_message = "添加成功"
+        delete_message = "删除成功成功"
         return render_template('delete_person.html', delete_message=delete_message, form=form)
     return render_template('delete_person.html', form=form)
 

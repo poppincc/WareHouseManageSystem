@@ -1,6 +1,6 @@
 import pymysql
 
-conn = pymysql.connect(host="127.0.0.1", port=3306, user="root", passwd="271828", db="test", charset="utf8")
+conn = pymysql.connect(host="127.0.0.1", port=3306, user="root", passwd="123456", db="test", charset="utf8")
 cur = conn.cursor()
 
 
@@ -20,7 +20,7 @@ def loginCheck(name, pwd):
 def login_Authority(id):
     conn.ping(reconnect=True)
     sql = "select authority from  authority where personName='%s'" % (id)
-    #sql = "select authority from  authority where personName='"+id+"';"
+    # sql = "select authority from  authority where personName='"+id+"';"
     cur.execute(sql)
     result = cur.fetchone()
     for record in result:
@@ -98,11 +98,43 @@ def cc_add_account(name, pwd, power):
         cur.execute(sql_account)
         # 提交到数据库执行
         conn.commit()
+        result = cur.fetchall()
+        return result
         conn.close()
     except Exception as e:
         print(e)
         conn.rollback()
 
+# cc 管理员增加人员
+def cc_findname():
+    sql_find = 'SELECT personId,personName FROM authority'
+    # 执行SQL语句
+    try:
+        cur.execute(sql_find)
+        # 提交到数据库执行
+        conn.commit()
+        result = cur.fetchall()
+        return result
+        conn.close()
+    except Exception as e:
+        print(e)
+        conn.rollback()
+
+# cc 管理员删除人员
+def cc_deletename(id):
+    sql_delete = 'DELETE FROM authority WHERE personId = ' + id
+    print(sql_delete)
+    # 执行SQL语句
+    try:
+        cur.execute(sql_delete)
+        # 提交到数据库执行
+        conn.commit()
+        result = cur.fetchall()
+        return result
+        conn.close()
+    except Exception as e:
+        print(e)
+        conn.rollback()
 
 # Bill学生打卡记录
 def add_register(name):
