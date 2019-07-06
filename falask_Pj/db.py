@@ -1,6 +1,6 @@
 import pymysql
 
-conn = pymysql.connect(host="127.0.0.1", port=3306, user="root", passwd="123456", db="test", charset="utf8")
+conn = pymysql.connect(host="127.0.0.1", port=3306, user="root", passwd="271828", db="test", charset="utf8")
 cur = conn.cursor()
 
 
@@ -20,6 +20,7 @@ def loginCheck(name, pwd):
 def login_Authority(id):
     conn.ping(reconnect=True)
     sql = "select authority from  authority where personName='%s'" % (id)
+    #sql = "select authority from  authority where personName='"+id+"';"
     cur.execute(sql)
     result = cur.fetchone()
     for record in result:
