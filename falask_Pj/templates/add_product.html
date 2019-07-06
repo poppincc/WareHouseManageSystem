@@ -83,17 +83,12 @@
                 </li>
                 <li class="menu-title">菜单</li><!-- /.menu-title -->
                 <li>
-                    <a href="{{ url_for("changepassword") }}"> <i class="menu-icon fa fa-cogs"></i>物料管理</a>
+                    <a href="{{ url_for("product_management.show_products") }}"> <i class="menu-icon fa fa-cogs"></i>成品列表</a>
                 </li>
                 <li>
-                    <a href="{{ url_for("product_management.show_products") }}"> <i class="menu-icon fa fa-th"></i>成品管理</a>
+                    <a href="{{ url_for("product_management.add_product") }}"> <i class="menu-icon fa fa-th"></i>添加成品</a>
                 </li>
-                <li>
-                    <a href="{{ url_for("show_account") }}"> <i class="menu-icon fa fa-table"></i>采购管理</a>
-                </li>
-                <li>
-                    <a href="{{ url_for("person_management") }}"> <i class="menu-icon fa fa-table"></i>人员管理</a>
-                </li>
+
             </ul>
         </div><!-- /.navbar-collapse -->
     </nav>
@@ -137,6 +132,158 @@
     <!-- /#header -->
     <!-- Content -->
     <div class="content">
+        <div class="card">
+            <div class="card-header">
+                <strong class="card-title">用户中心</strong>
+            </div>
+            <div class="card-body">
+                <!-- Credit Card -->
+                <div id="pay-invoice">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <h3 class="text-center">增加人员</h3>
+                        </div>
+                        <hr>
+                        <form action="#" method="post" novalidate="novalidate">
+                            <div class="form-group text-center">
+                                <ul class="list-inline">
+                                    <li class="list-inline-item"><i class="text-muted fa fa-cc-visa fa-2x"></i></li>
+                                    <li class="list-inline-item"><i class="fa fa-cc-mastercard fa-2x"></i></li>
+                                    <li class="list-inline-item"><i class="fa fa-cc-amex fa-2x"></i></li>
+                                    <li class="list-inline-item"><i class="fa fa-cc-discover fa-2x"></i></li>
+                                </ul>
+                            </div>
+                            {#<div class="form-group">
+                                <label for="cc-payment" class="control-label mb-1">登录账号</label>
+                                <input id="accountid" name="accountid" type="text" class="form-control"
+                                       aria-required="true" aria-invalid="false" value="">
+                            </div>
+                            <div class="form-group has-success">
+                                <label for="cc-name" class="control-label mb-1">姓名</label>
+                                <input id="name" name="name" type="text"
+                                       class="form-control cc-name valid" data-val="true"
+                                       data-val-required="Please enter the name on card" autocomplete="cc-name"
+                                       aria-required="true" aria-invalid="false" aria-describedby="cc-name">
+                                <span class="help-block field-validation-valid" data-valmsg-for="cc-name"
+                                      data-valmsg-replace="true"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="cc-number" class="control-label mb-1">密码</label>
+                                <input id="pwd" name="pwd" type="text"
+                                       class="form-control cc-number identified visa" value="" data-val="true"
+                                       data-val-required="Please enter the card number"
+                                       data-val-cc-number="Please enter a valid card number">
+                                <span class="help-block" data-valmsg-for="cc-number" data-valmsg-replace="true"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="cc-payment" class="control-label mb-1">性别</label>
+                                <input id="gender" name="gender" type="text" class="form-control"
+                                       aria-required="true" aria-invalid="false" value="">
+                            </div>
+                                <div class="form-group">
+                                <label for="cc-payment" class="control-label mb-1">邮箱</label>
+                                <input id="email" name="email" type="text" class="form-control"
+                                       aria-required="true" aria-invalid="false" value="">
+                            </div>
+                                <div class="form-group">
+                                <label for="cc-payment" class="control-label mb-1">电话</label>
+                                <input id="tel" name="tel" type="text" class="form-control"
+                                       aria-required="true" aria-invalid="false" value="">
+                            </div>
+                            <div class="form-group">
+                                <label for="cc-payment" class="control-label mb-1">简介</label>
+                                <input id="introduce" name="introduce" type="text" class="form-control"
+                                       aria-required="true" aria-invalid="false" value="">
+                            </div>
+                                <div class="form-group">
+                                <label for="cc-payment" class="control-label mb-1">权限</label>
+                                <input id="ruletype" name="ruletype" type="text" class="form-control"
+                                       aria-required="true" aria-invalid="false" value="">
+                            </div>
+                            <div>
+                                <button id="payment-button" type="submit" class="btn btn-lg btn-info btn-block">
+                                    <i class="fa fa-lock fa-lg"></i>&nbsp;
+                                    <span id="payment-button-amount">添加</span>
+                                    <span id="payment-button-sending" style="display:none;">Sending…</span>
+                                </button>
+                                {% if add_message %} {{ add_message }} {% endif %}
+                            </div>#}
+
+                            <!--
+                            1、col是column简写：列；
+                            2、xs是maxsmall简写：超小， sm是small简写：小，  md是medium简写：中等， lg是large简写：大；
+                            3、-* 表示占列数，即占每行row分12列栅格系统比；
+                            4、.col-xs-* 超小屏幕如手机 （<768px）时使用；
+                                col-sm-* 小屏幕如平板 （768px ≤ 宽度 ＜992px）时使用；
+                                col-md-* 中等屏幕如普通显示器 （992px ≤ 宽度 ＜ 1200px）时使用；
+                                col-lg-* 大屏幕如大显示器 （≥1200px）时使用。-->
+                            <div class="row">
+                                <label for="productcode" class="control-label mb-1">成品编码</label>  <!--for 属性规定 label 与哪个表单元素绑定。-->
+                                <div id="productcode" class="col-xs-12">
+                                    {{ form.productcode }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class="control-label mb-1">成品型号</label>
+                                <div class="col-xs-12">
+                                    {{ form.producttype }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class="control-label mb-1">客户</label>
+                                <div class="col-xs-12">
+                                    {{ form.client }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class="control-label mb-1">录入员姓名</label>
+                                <div class="col-xs-12">
+                                    {{ form.entryclerk }}
+                                </div>
+                            </div>
+
+                            <br/>                                                                          <!--br空行-->
+
+                            <div class="card-body">
+                                <table id="bootstrap-data-table" class="table table-striped table-bordered">
+                                <caption><h1>物料组成</h1></caption>
+                                <br/>
+                                    <thead>
+                                        <tr align="center" bgcolor="deepskyblue">
+                                            <th>物料编码</th>
+                                            <th>物料数量</th>
+                                            <th>物料单价</th>
+                                            <th>贴片数量</th>
+                                            <th>贴片单价</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for i in allclass %}
+                                            <tr>
+                                            <td>{{ i[0] }}</td>
+                                            <td>{{ i[1] }}</td>
+                                            <td>{{ i[1] }}</td>
+                                            <td>{{ i[1] }}</td>
+                                            <td>{{ i[1] }}</td>
+                                            </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <br/>                                                                          <!--br空行-->
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    {{ form.submit }}
+                                    {{ form.csrf_token }}
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div> <!-- .card -->
 
 
     </div>
@@ -361,5 +508,31 @@ cript>
         // Bar Chart #flotBarChart End
     });
 </script>
+
+<!--下拉框-->
+<script>
+    $(".selectd").on('focus', function (e) {
+        var optionTxts = ['','足够的市场机会','持续增强组织能力','增强每日管理能力','赢客工具的上线和使用'];
+        var value = $(this).text();
+        var htmlText = "<select id='sel_BizPlan' style='width:100%; '>";
+        for(var i=0;i<optionTxts.length;i++){
+            //for(var option of optionTxts){
+            var optionTex = optionTxts[i];
+            if(optionTex== value){
+                htmlText = htmlText+"<option selected = 'true'>"+optionTex+"</option>";
+                /*if(value == optionTex){
+                htmlText = htmlText+"<option selected = 'true'>"+optionTex+"</option>";
+                */
+            }else{
+                htmlText = htmlText+"<option>"+optionTex+"</option>";
+            }
+        };		htmlText = htmlText+"</select>";
+        $(this).parent().append(htmlText);
+        $(this).hide();
+        $("#sel_BizPlan").focus();
+    });
+</script>
+
+
 </body>
 </html>

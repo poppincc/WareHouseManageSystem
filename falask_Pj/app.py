@@ -5,7 +5,8 @@ from db import *
 import config
 import os
 
-from templates.form import MyForm, SelectForm
+from form import MyForm, SelectForm
+from product_management import product_management
 
 app = Flask(__name__)
 
@@ -342,6 +343,11 @@ def accounting_baobiao():
     baobiaoxize = show_baobiaoxize();
     print(baobiaoxize)
     return render_template('accounting_baobiao.html', baobiao=baobiao,baobiaoxize = baobiaoxize)
+
+
+# xijiawei
+# 添加“product_management.py”蓝本
+app.register_blueprint(product_management)
 
 if __name__ == '__main__':
     app.run(debug=True)
