@@ -136,6 +136,22 @@ def cc_deletename(id):
         print(e)
         conn.rollback()
 
+# cc 修改人员权限
+def cc_changeAuthority(id,authority):
+    sql_change = 'UPDATE authority SET authority = \'' + authority + '\' WHERE personId ='+ id
+    # print(sql_change)
+    # 执行SQL语句
+    try:
+        cur.execute(sql_change)
+        # 提交到数据库执行
+        conn.commit()
+        result = cur.fetchall()
+        return result
+        conn.close()
+    except Exception as e:
+        print(e)
+        conn.rollback()
+
 # Bill学生打卡记录
 def add_register(name):
     sql = "insert into register (accountingid,type,time) values(%s,%s,now())" % (name, 1)
