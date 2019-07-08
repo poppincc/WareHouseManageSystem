@@ -69,6 +69,24 @@
             height: 160px;
         }
 
+        .left {
+            float: left;
+            width: 48%;
+            height: 100%;
+        }
+        .right {
+            margin-left: 50%;
+            height: 100%;
+        }
+
+        #div1, #div2, #div3, #div4, #div5{
+            display: inline-block;
+        }
+
+        #wrap{
+            display: flex;
+            justify-content: flex-start;
+        }
     </style>
 </head>
 
@@ -144,7 +162,7 @@
                             <h3 class="text-center">增加人员</h3>
                         </div>
                         <hr>
-                        <form action="#" method="post" novalidate="novalidate">
+                        <form id="add_product_form" action="#" method="post" novalidate="novalidate">
                             <div class="form-group text-center">
                                 <ul class="list-inline">
                                     <li class="list-inline-item"><i class="text-muted fa fa-cc-visa fa-2x"></i></li>
@@ -153,61 +171,6 @@
                                     <li class="list-inline-item"><i class="fa fa-cc-discover fa-2x"></i></li>
                                 </ul>
                             </div>
-                            {#<div class="form-group">
-                                <label for="cc-payment" class="control-label mb-1">登录账号</label>
-                                <input id="accountid" name="accountid" type="text" class="form-control"
-                                       aria-required="true" aria-invalid="false" value="">
-                            </div>
-                            <div class="form-group has-success">
-                                <label for="cc-name" class="control-label mb-1">姓名</label>
-                                <input id="name" name="name" type="text"
-                                       class="form-control cc-name valid" data-val="true"
-                                       data-val-required="Please enter the name on card" autocomplete="cc-name"
-                                       aria-required="true" aria-invalid="false" aria-describedby="cc-name">
-                                <span class="help-block field-validation-valid" data-valmsg-for="cc-name"
-                                      data-valmsg-replace="true"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="cc-number" class="control-label mb-1">密码</label>
-                                <input id="pwd" name="pwd" type="text"
-                                       class="form-control cc-number identified visa" value="" data-val="true"
-                                       data-val-required="Please enter the card number"
-                                       data-val-cc-number="Please enter a valid card number">
-                                <span class="help-block" data-valmsg-for="cc-number" data-valmsg-replace="true"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="cc-payment" class="control-label mb-1">性别</label>
-                                <input id="gender" name="gender" type="text" class="form-control"
-                                       aria-required="true" aria-invalid="false" value="">
-                            </div>
-                                <div class="form-group">
-                                <label for="cc-payment" class="control-label mb-1">邮箱</label>
-                                <input id="email" name="email" type="text" class="form-control"
-                                       aria-required="true" aria-invalid="false" value="">
-                            </div>
-                                <div class="form-group">
-                                <label for="cc-payment" class="control-label mb-1">电话</label>
-                                <input id="tel" name="tel" type="text" class="form-control"
-                                       aria-required="true" aria-invalid="false" value="">
-                            </div>
-                            <div class="form-group">
-                                <label for="cc-payment" class="control-label mb-1">简介</label>
-                                <input id="introduce" name="introduce" type="text" class="form-control"
-                                       aria-required="true" aria-invalid="false" value="">
-                            </div>
-                                <div class="form-group">
-                                <label for="cc-payment" class="control-label mb-1">权限</label>
-                                <input id="ruletype" name="ruletype" type="text" class="form-control"
-                                       aria-required="true" aria-invalid="false" value="">
-                            </div>
-                            <div>
-                                <button id="payment-button" type="submit" class="btn btn-lg btn-info btn-block">
-                                    <i class="fa fa-lock fa-lg"></i>&nbsp;
-                                    <span id="payment-button-amount">添加</span>
-                                    <span id="payment-button-sending" style="display:none;">Sending…</span>
-                                </button>
-                                {% if add_message %} {{ add_message }} {% endif %}
-                            </div>#}
 
                             <!--
                             1、col是column简写：列；
@@ -218,35 +181,79 @@
                                 col-md-* 中等屏幕如普通显示器 （992px ≤ 宽度 ＜ 1200px）时使用；
                                 col-lg-* 大屏幕如大显示器 （≥1200px）时使用。-->
                             <div class="row">
-                                <label for="productcode" class="control-label mb-1">成品编码</label>  <!--for 属性规定 label 与哪个表单元素绑定。-->
-                                <div id="productcode" class="col-xs-12">
-                                    {{ form.productcode }}
+                                <div class="left">
+                                    <label for="productcode" class="control-label mb-1">成品编码</label>  <!--for 属性规定 label 与哪个表单元素绑定。-->
+                                    <div class="col-xs-12">
+                                        {{ form.productcode }}
+                                    </div>
+                                </div>
+
+                                <div class="right">
+                                    <label class="control-label mb-1">成品型号</label>
+                                    <div class="col-xs-12">
+                                        {{ form.producttype }}
+                                    </div>
                                 </div>
                             </div>
+
+
                             <div class="row">
-                                <label class="control-label mb-1">成品型号</label>
-                                <div class="col-xs-12">
-                                    {{ form.producttype }}
+                                <div class="left">
+                                    <label class="control-label mb-1">客户</label>
+                                    <div class="col-xs-12">
+                                        {{ form.client }}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <label class="control-label mb-1">客户</label>
-                                <div class="col-xs-12">
-                                    {{ form.client }}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <label class="control-label mb-1">录入员姓名</label>
-                                <div class="col-xs-12">
-                                    {{ form.entryclerk }}
+
+                                <div class="right">
+                                    <label class="control-label mb-1">录入员姓名</label>
+                                    <div class="col-xs-12">
+                                        {{ form.entryclerk }}
+                                    </div>
                                 </div>
                             </div>
 
                             <br/>                                                                          <!--br空行-->
 
+                            <div id="wrap" class="row">
+                                <div>
+                                    <label class="control-label mb-1">物料编码</label>
+                                    <div class="col-xs-12">
+                                        {{ form.materialCode }}
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="control-label mb-1">物料数量</label>
+                                    <div class="col-xs-12">
+                                        {{ form.materialNum }}
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="control-label mb-1">物料单价</label>
+                                    <div class="col-xs-12">
+                                        {{ form.materialPrice }}
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="control-label mb-1">贴片数量</label>
+                                    <div class="col-xs-12">
+                                        {{ form.patchPoint }}
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="control-label mb-1">贴片单价</label>
+                                    <div class="col-xs-12">
+                                        {{ form.patchPrice }}
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="card-body">
-                                <table id="bootstrap-data-table" class="table table-striped table-bordered">
-                                <caption><h1>物料组成</h1></caption>
+                                <!--button 默认的type是sumbit 要声明为type="button" -->
+                                <button onclick="addRow()" type="button"><img src="http://jianzhong5137.blog.163.com/blog/button.gif" alt=""/>添加物料</button>
+                                <br/>
+                                <table id="materialofproduct" class="table table-striped table-bordered">
+                                <!--<caption><h3>物料组成</h3></caption>-->                                    <!--h1标签控制一段文字的大小(从h1~h6)-->
                                 <br/>
                                     <thead>
                                         <tr align="center" bgcolor="deepskyblue">
@@ -258,6 +265,20 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    <!--<tr>
+                                        <td>三极管</td>
+                                        <td>23</td>
+                                        <td>2.00</td>
+                                        <td>11</td>
+                                        <td>0.05</td>
+                                    </tr>-->
+                                    <!--<tr>
+                                        <td><input type="text"/></td>
+                                        <td><input type="text"/></td>
+                                        <td><input type="text"/></td>
+                                        <td><input type="text"/></td>
+                                        <td><input type="text"/></td>
+                                    </tr>-->
                                     {% for i in allclass %}
                                             <tr>
                                             <td>{{ i[0] }}</td>
@@ -272,6 +293,7 @@
                             </div>
 
                             <br/>                                                                          <!--br空行-->
+
                             <div class="row">
                                 <div class="col-xs-12">
                                     {{ form.submit }}
@@ -509,7 +531,177 @@ cript>
     });
 </script>
 
+<!--jQuery-->
+<!--//导入jquery模块-->
+<!--jquery是一个js包，为了就是减少js的代码量-->
+<script src="/static/jquery/jquery-2.1.4.min.js"></script>
+<script  type="text/javascript">
+    $(function() {
+        $("#add_product_form").submit(function(e)
+        {
+            e.preventDefault();
+            alert('提交');
+
+            var tableObj = document.getElementById("materialofproduct");
+            var rows=tableObj.rows;
+            console.log(rows);
+            for(var i=1;i<rows.length;i++) //从第二行开始获取表格数据，除去标题这行
+            {
+                for(var j=0;j<rows[i].cells.length;j++)
+                {
+                    console.log(rows[i].cells[j].innerHTML);
+                }
+            }
+
+            $.ajax({
+                url: "/add_product",
+                type: "POST",
+                dataType: "json",
+                data:$(this).serialize(),
+                success: function (callback) {
+                    console.log(callback);
+                    if(callback.valueOf('ok')){
+                        window.location.href="/product_management";//跳转地址
+                    }
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    console.log(xhr.status);// 状态码
+                    console.log(xhr.readyState);// 状态
+                    console.log(textStatus);// 错误信息
+                    alert('错误');
+                }
+            });
+
+        })
+    })
+</script>
+
+<script src="/static/jquery/jquery-2.1.4.min.js"></script>
+<script  type="text/javascript">
+    var rowCount = 1;
+    var colCount=1;
+    var html='';
+    function addRow() {
+        //alert("点击");
+        rowCount++;
+        console.log(rowCount);
+        console.log(colCount);
+        for(var i=0;i<colCount-2;i++){
+            html += '<td><input/></td>';
+        }
+        //console.log($("#add_product_form").serialize());
+        //console.log(getFormData($("#add_product_form")));
+        var formData=getFormData($("#add_product_form"));
+        //console.log(formData['entryclerk']);
+        /*var rowTemplate = '<tr class="tr_'+rowCount+'">\n' +
+            '                                        <td>三极管</td>\n' +
+            '                                        <td>23</td>\n' +
+            '                                        <td>2.00</td>\n' +
+            '                                        <td>11</td>\n' +
+            '                                        <td>0.05</td>'+html+'</tr>';*/
+        var rowTemplate = '<tr class="tr_'+rowCount+'">\n' +
+            '                                        <td>'+formData['materialCode']+'</td>\n' +
+            '                                        <td>'+formData['materialNum']+'</td>\n' +
+            '                                        <td>'+formData['materialPrice']+'</td>\n' +
+            '                                        <td>'+formData['patchPoint']+'</td>\n' +
+            '                                        <td>'+formData['patchPrice']+'</td>'+html+'</tr>';
+        var tableHtml = $("#materialofproduct tbody").html();
+        tableHtml += rowTemplate;
+        $("#materialofproduct tbody").html(tableHtml);
+        html='';
+    }
+
+    function getFormData($form) {
+        var unindexed_array = $form.serializeArray();
+        var indexed_array = {};
+
+        $.map(unindexed_array, function (n, i) {
+            indexed_array[n['name']] = n['value'];
+        });
+
+        return indexed_array;
+    }
+
+    $("#materialofproduct").on("dblclick","td",function(){
+        //alert("要编辑吗？");
+        var td = $(this);
+        var url=$("form").attr("action");
+        // 根据表格文本创建文本框 并加入表表中--文本框的样式自己调整
+        var text = td.text();
+        var txt = $("<input name='cell' type='text' class='form-control'>").val(text);
+        //var txt = $("<input name='cell' type='text'>").val(text);
+        txt.blur(function(){
+            // 失去焦点，保存值。于服务器交互自己再写,最好ajax
+            var newText = $(this).val(),
+                name=$(this).attr("name"),
+                input=$(this),
+                data={name:newText};
+            $.post(url,data,function () {
+                // 移除文本框,显示新值
+                input.remove();
+                td.text(newText);
+            });
+        });
+        td.text("");
+        td.append(txt);
+    });
+
+    /*var inputItem;
+    var g_activeItem;
+    function changeToText(obj){
+        alert('文本');
+        if( obj && inputItem ) {
+            var str = " ";
+            if(inputItem.value != "") {
+                str = inputItem.value;
+            }
+            obj.innerText = str;
+        }
+    }
+
+    function changeToEdit(obj){
+        alert('要编辑吗？');
+        if(event.srcElement.tagName.toLowerCase() == "td"){
+            inputItem=document.createElement("input");
+            inputItem.type="text";
+            inputItem.style.size="20";
+            inputItem.style.height="18px";
+            inputItem.style.fontSize="12px";
+        }
+        inputItem.value = obj.innerText;
+        obj.innerHTML = '';
+        obj.appendChild(inputItem);
+        inputItem.focus();
+        g_activeItem = obj;
+    }
+
+    //旧版使用document.attachEvent("onclick",function(){})
+    document.getElementById("materialofproduct").addEventListener("ondblclick",function(event){
+        if(event.srcElement.tagName.toLowerCase() == "td"){
+            changeToEdit(event.srcElement);
+        }
+    });*/
+
+    //旧版使用document.attachEvent("onclick",function(){})
+    /*var x = document.getElementById("myBtn");
+    if (x.addEventListener) {                    //所有主流浏览器，除了 IE 8 及更早 IE版本
+        x.addEventListener("click", myFunction);
+    } else if (x.attachEvent) {                  // IE 8 及更早 IE 版本
+        x.attachEvent("onclick", myFunction);
+    }*/
+    /*document.getElementById("materialofproduct").addEventListener("onclick",function(event){
+        if( event.srcElement.parentNode == g_activeItem || event.srcElement == g_activeItem ) {
+            return;
+        } else {
+            changeToText(g_activeItem);
+        }
+    });
+    document.createEvent("HTMLEvents").initEvent("ondblclick", false, false);
+    document.createEvent("HTMLEvents").initEvent("onclick", false, false);*/
+</script>
+
 <!--下拉框-->
+<script src="/static/jquery/jquery-2.1.4.min.js"></script>
 <script>
     $(".selectd").on('focus', function (e) {
         var optionTxts = ['','足够的市场机会','持续增强组织能力','增强每日管理能力','赢客工具的上线和使用'];
@@ -532,7 +724,6 @@ cript>
         $("#sel_BizPlan").focus();
     });
 </script>
-
 
 </body>
 </html>

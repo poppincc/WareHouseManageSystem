@@ -36,7 +36,7 @@ class AddProductForm(Form):
             "required": 'required'  # 表示输入框不能为空，并有提示信息
         }
     )
-    # 成品编号
+    # 成品类型
     producttype = StringField(
         # 标签
         label="成品类型",
@@ -52,7 +52,7 @@ class AddProductForm(Form):
             "required": 'required'  # 表示输入框不能为空，并有提示信息
         }
     )
-    # 成品编号
+    # 客户
     client = StringField(
         # 标签
         label="客户",
@@ -68,7 +68,7 @@ class AddProductForm(Form):
             "required": 'required'  # 表示输入框不能为空，并有提示信息
         }
     )
-    # 成品编号
+    # 录入员
     entryclerk = StringField(
         # 标签
         label="录入员",
@@ -81,6 +81,86 @@ class AddProductForm(Form):
         render_kw={
             "class": "form-control",
             "placeholder": "请输入录入员姓名",
+            "required": 'required'  # 表示输入框不能为空，并有提示信息
+        }
+    )
+    # 物料编号
+    materialCode = StringField(
+        # 标签
+        label="物料编码",
+        # 验证器
+        validators=[
+            DataRequired('请输入物料编码')
+        ],
+        description="录入员",
+        # 附加选项,会自动在前端判别
+        render_kw={
+            "class": "form-control",
+            "placeholder": "请输入物料编码",
+            "required": 'required'  # 表示输入框不能为空，并有提示信息
+        }
+    )
+    # 物料数量
+    materialNum = StringField(
+        # 标签
+        label="录入员",
+        # 验证器
+        validators=[
+            DataRequired('请输入物料数量')
+        ],
+        description="物料数量",
+        # 附加选项,会自动在前端判别
+        render_kw={
+            "class": "form-control",
+            "placeholder": "请输入物料数量",
+            "required": 'required'  # 表示输入框不能为空，并有提示信息
+        }
+    )
+    # 物料单价
+    materialPrice = StringField(
+        # 标签
+        label="物料单价",
+        # 验证器
+        validators=[
+            DataRequired('请输入物料单价')
+        ],
+        description="录入员",
+        # 附加选项,会自动在前端判别
+        render_kw={
+            "class": "form-control",
+            "placeholder": "请输入物料单价",
+            "required": 'required'  # 表示输入框不能为空，并有提示信息
+        }
+    )
+    # 贴片数量
+    patchPoint = StringField(
+        # 标签
+        label="贴片数量",
+        # 验证器
+        validators=[
+            DataRequired('请输入贴片数量')
+        ],
+        description="贴片数量",
+        # 附加选项,会自动在前端判别
+        render_kw={
+            "class": "form-control",
+            "placeholder": "请输入贴片数量",
+            "required": 'required'  # 表示输入框不能为空，并有提示信息
+        }
+    )
+    # 贴片单价
+    patchPrice = StringField(
+        # 标签
+        label="贴片单价",
+        # 验证器
+        validators=[
+            DataRequired('请输入贴片单价')
+        ],
+        description="贴片单价",
+        # 附加选项,会自动在前端判别
+        render_kw={
+            "class": "form-control",
+            "placeholder": "请输入贴片单价",
             "required": 'required'  # 表示输入框不能为空，并有提示信息
         }
     )
