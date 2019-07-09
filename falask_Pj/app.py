@@ -5,7 +5,7 @@ from db import *
 import config
 import os
 
-from form import MyForm, SelectForm, ChangeForm
+from templates.form import MyForm, SelectForm
 
 app = Flask(__name__)
 
@@ -237,7 +237,7 @@ def person_management():
 @app.route('/show_person',methods=['GET', 'POST'])
 def show_person():
     person = show_allperson()
-    # print(person)
+    print(person)
     return render_template('person_management_show.html',person =person)
 
 # cc 人员管理_增加人员
@@ -262,30 +262,23 @@ def add_person():
 # cc 人员管理_删除人员
 @app.route('/delete_person',methods=['GET', 'POST'])
 def delete_person():
-    result = cc_findname()
-    person = show_allperson()
     form = SelectForm()
     if request.method == "POST":
         print("删除人员: ")
-        id = form.data['personName']
-        cc_deletename(id)
-        delete_message = "删除成功"
-        return render_template('delete_person.html', delete_message=delete_message, form=form, person=person)
-    return render_template('delete_person.html', form=form, person=person)
+        name = form.data['personName']
+        print(name)
+
+        delete_message = "删除成功成功"
+        return render_template('delete_person.html', delete_message=delete_message, form=form)
+    return render_template('delete_person.html', form=form)
 
 # cc 人员管理_权限管理
-@app.route('/change_person',methods=['GET', 'POST'])
+@app.route('/show_person',methods=['GET', 'POST'])
 def change_person():
     person = show_allperson()
-    form = ChangeForm()
-    if request.method == "POST":
-        print("修改人员权限")
-        id = form.data['personName']
-        authority = form.data['status'] + "" + form.data['statusPro'] + "" + form.data['statusPur']
-        cc_changeAuthority(id,authority)
-        change_message = "修改成功"
-        return render_template('change_person.html', change_message=change_message, form=form, person=person)
-    return render_template('change_person.html', form=form, person=person)
+    print(person)
+    return render_template('person_management_show.html',person =person)
+
 # Bill  学生签到
 @app.route('/stu_register', methods=['GET', 'POST'])
 def stu_register():

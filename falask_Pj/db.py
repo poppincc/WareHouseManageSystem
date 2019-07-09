@@ -286,3 +286,44 @@ def show_allregister():
     # for record in result:
     return result
     conn.close()
+
+# xijiawei
+# 展示所有成品
+def show_allproducts():
+    sql = "select productCode,productType from productInfo;"
+    cur.execute(sql)
+    result=cur.fetchall()
+    return result
+    conn.close()
+
+# xijiawei
+# 插入成品静态表
+def insert_into_productInfo(productcode,producttype,client,adminstrationCost,processCost,supplementaryCost,operatingCost,tax,remark):
+    sql = "insert into productInfo (productCode,productType,client,adminstrationCost,processCost,supplementaryCost,operatingCost,tax,remark)value('%s','%s','%s','%s','%s','%s','%s','%s','%s');" \
+          % (productcode,producttype,client,adminstrationCost,processCost,supplementaryCost,operatingCost,tax,remark)
+    try:
+        # 执行SQL语句
+        cur.execute(sql)
+        # 提交到数据库执行
+        conn.commit()
+        print("语句已经提交")
+        return True
+        conn.close()
+    except:
+        conn.rollback()
+
+# xijiawei
+# 插入成品录入表
+def insert_into_productChange(productCode,entryClerk,updateOfContent):
+    sql = "insert into productInfo (productCode,entryClerk,updateOfContent)value('%s','%s','%s','%s');" \
+          % (productCode,entryClerk,updateOfContent)
+    try:
+        # 执行SQL语句
+        cur.execute(sql)
+        # 提交到数据库执行
+        conn.commit()
+        print("语句已经提交")
+        return True
+        conn.close()
+    except:
+        conn.rollback()
