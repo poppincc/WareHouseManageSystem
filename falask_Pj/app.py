@@ -5,7 +5,8 @@ from db import *
 import config
 import os
 
-from templates.form import MyForm, SelectForm
+from form import MyForm, SelectForm, ChangeForm
+from product_management import product_management
 
 app = Flask(__name__)
 
@@ -110,7 +111,7 @@ def user_login():
         print("开始调用函数获取用户类型")
         Authority = login_Authority(username)
         print("Authority", Authority)
-        if Authority == '333':
+        if Authority == '888':
             print("admin login!")
             return redirect(url_for('index_adm'))
             # return redirect(url_for('user_login'))
@@ -133,7 +134,7 @@ def user_login():
         # print(type(Authority))
         if loginCheck(user.id, user.pwd):
             session['username'] = user.id
-            if Authority == '333':
+            if Authority == '888':
                 print("admin login!")
                 return redirect(url_for('index_adm'))
             elif Authority == 2:
@@ -237,7 +238,7 @@ def person_management():
 @app.route('/show_person',methods=['GET', 'POST'])
 def show_person():
     person = show_allperson()
-    print(person)
+    # print(person)
     return render_template('person_management_show.html',person =person)
 
 # cc 人员管理_增加人员
@@ -262,23 +263,30 @@ def add_person():
 # cc 人员管理_删除人员
 @app.route('/delete_person',methods=['GET', 'POST'])
 def delete_person():
+    result = cc_findname()
+    person = show_allperson()
     form = SelectForm()
     if request.method == "POST":
         print("删除人员: ")
-        name = form.data['personName']
-        print(name)
-
-        delete_message = "删除成功成功"
-        return render_template('delete_person.html', delete_message=delete_message, form=form)
-    return render_template('delete_person.html', form=form)
+        id = form.data['personName']
+        cc_deletename(id)
+        delete_message = "删除成功"
+        return render_template('delete_person.html', delete_message=delete_message, form=form, person=person)
+    return render_template('delete_person.html', form=form, person=person)
 
 # cc 人员管理_权限管理
-@app.route('/show_person',methods=['GET', 'POST'])
+@app.route('/change_person',methods=['GET', 'POST'])
 def change_person():
     person = show_allperson()
-    print(person)
-    return render_template('person_management_show.html',person =person)
-
+    form = ChangeForm()
+    if request.method == "POST":
+        print("修改人员权限")
+        id = form.data['personName']
+        authority = form.data['status'] + "" + form.data['statusPro'] + "" + form.data['statusPur']
+        cc_changeAuthority(id,authority)
+        change_message = "修改成功"
+        return render_template('change_person.html', change_message=change_message, form=form, person=person)
+    return render_template('change_person.html', form=form, person=person)
 # Bill  学生签到
 @app.route('/stu_register', methods=['GET', 'POST'])
 def stu_register():
@@ -342,6 +350,11 @@ def accounting_baobiao():
     baobiaoxize = show_baobiaoxize();
     print(baobiaoxize)
     return render_template('accounting_baobiao.html', baobiao=baobiao,baobiaoxize = baobiaoxize)
+
+# xijiawei
+# 添加“product_management.py”蓝本
+app.register_blueprint(product_management)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

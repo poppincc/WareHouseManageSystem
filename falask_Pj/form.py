@@ -17,6 +17,18 @@ class SelectForm(Form):
     result = cc_findname()
     personName = SelectField('用户姓名', validators=[Required()], choices=result)
 
+# 修改人员权限表单
+class ChangeForm(Form):
+    result = cc_findname()
+    # print(result)
+    personName = SelectField('用户姓名', validators=[Required()], choices=result)
+    status = SelectField('物料权限', validators=[Required()],
+                         choices=[('0', '无权限'), ('1', '查看（无金额）'), ('2', '查看（有金额）'), ('3', '修改')])
+    statusPro = SelectField('成品权限', validators=[Required()],
+                            choices=[('0', '无权限'), ('1', '查看（无金额）'), ('2', '查看（有金额）'), ('3', '修改')])
+    statusPur = SelectField('采购权限', validators=[Required()],
+                            choices=[('0', '无权限'), ('1', '查看（无金额）'), ('2', '查看（有金额）'), ('3', '修改')])
+
 # xijiawei
 # 添加成品表单
 class AddProductForm(Form):
