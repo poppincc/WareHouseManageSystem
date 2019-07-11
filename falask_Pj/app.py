@@ -2,7 +2,7 @@ from datetime import timedelta
 from flask import Flask, url_for, render_template, request, redirect, session
 from model import User, NewUser
 from db import *
-import config
+import config,datetime
 import os
 
 from form import MyForm, SelectForm, ChangeForm
@@ -99,8 +99,13 @@ def index_account():
 def index_adm():
     return render_template('adm_index.html')
 
+# cc 操作员
+@app.route('/oprator')
+def index_operator():
+    print(session['username'])
+    return render_template('operator_index.html')
 
-# bill登陆
+# cc 登陆
 @app.route('/login/', methods=['GET', 'POST'])
 def user_login():
     print(session)
@@ -114,13 +119,9 @@ def user_login():
         if Authority == '888':
             print("admin login!")
             return redirect(url_for('index_adm'))
-            # return redirect(url_for('user_login'))
-        elif Authority == 2:
-            return redirect(url_for('index_teacher'))
-        elif Authority == 3:
-            return redirect(url_for('index_account'))
         else:
-            return redirect(url_for('index_stu'))
+            print("oprator login!")
+            return redirect(url_for('index_operator'))
 
     # print(session[0])
     if request.method == "POST":
@@ -130,19 +131,16 @@ def user_login():
         user.pwd = request.form["user_pwd"]
         Authority = login_Authority(user.id)
         print("测试Authorith 输出数字", Authority)
-        print("admin login", Authority)
+        # print("admin login", Authority)
         # print(type(Authority))
         if loginCheck(user.id, user.pwd):
             session['username'] = user.id
             if Authority == '888':
                 print("admin login!")
                 return redirect(url_for('index_adm'))
-            elif Authority == 2:
-                return redirect(url_for('index_teacher'))
-            elif Authority == 3:
-                return redirect(url_for('index_account'))
             else:
-                return redirect(url_for('index_stu'))
+                print("oprator login!")
+                return redirect(url_for('index_operator'))
         else:
             message = "用户名或者密码错误"
             return render_template('user_login.html', message=message)
@@ -350,6 +348,102 @@ def accounting_baobiao():
     baobiaoxize = show_baobiaoxize();
     print(baobiaoxize)
     return render_template('accounting_baobiao.html', baobiao=baobiao,baobiaoxize = baobiaoxize)
+
+
+# lh 查看物料信息
+@app.route('/show_material', methods=['GET', 'POST'])
+def show_material():
+    materialCode = ''
+    materialName = ''
+    materialTime = ''
+    materialType = ''
+    materialFactory = ''
+    personName = session['username']
+    if request.method == "POST":
+        materialCode = request.form["materialCode"]
+        materialName = request.form["materialName"]
+        materialTime = request.form["materialTime"]
+        materialType = request.form["materialType"]
+        materialFactory = request.form["materialFactory"]
+    materialAll = dao_show_material(materialCode, materialName, materialTime, materialType, materialFactory)
+    materialinfoAll = dao_show_materialinfo()
+    materialoutinAll = dao_show_materialoutin()
+    # print(materialAll)
+    return render_template('material_index.html', materialAll=materialAll, materialCode=materialCode,
+                           materialName=materialName, materialTime=materialTime, materialType=materialType,
+                           materialFactory=materialFactory)
+# lh 物料出入库
+@app.route('/material_outorin/<mName>', methods=['GET', 'POST'])
+def material_outorin(mName):
+    # print("出入库传参"+mName)
+    material_init = dao_show_materialoutorin(mName)
+    materialCode = ''
+    materialName = ''
+    materialType = ''
+    materialFactory = ''
+    materialTime = datetime.datetime.today()
+
+    personName = session['username']
+    mNum = ''
+    mDepartment = ''
+    m_price = 0
+    mDcNum = ''
+    isinorout = -1
+    if request.method == "POST":
+        materialCode = request.form["materialCode"]
+        materialName = request.form["materialName"]
+        materialType = request.form["materialType"]
+        materialFactory = request.form["materialFactory"]
+
+        mNum = request.form['mNum']
+        mDepartment = request.form['mDepartment']
+        m_price = request.form['m_price']
+        mDcNum = request.form['mDcNum']
+        isinorout = request.form['isinorout']
+        print("物料出入库", session['username'],isinorout)
+        if isinorout == '1':
+           print("出库！")
+           if dao_material_out(materialName):
+                print("出库成功")
+                message = "出库成功"
+                return render_template('material_outorin.html', message=message)
+           else:
+                message = "出库失败,请重新填写"
+                print("出库失败,请重新填写")
+                return render_template('material_outorin.html', message=message)
+                #   session.pop(user.name)
+        else:
+            print("入库！")
+            materialCode = request.form["materialCode"]
+            materialName = request.form["materialName"]
+            materialType = request.form["materialType"]
+            materialFactory = request.form["materialFactory"]
+
+            mNum = request.form['mNum']
+            mDepartment = request.form['mDepartment']
+            m_price = request.form['m_price']
+            mDcNum = request.form['mDcNum']
+            isinorout = request.form['isinorout']
+            if dao_material_in(materialCode, materialName, materialType, m_price,materialFactory,mNum,mDepartment,mDcNum,materialTime,personName):
+                print("入库成功")
+                message = "入库成功"
+                return render_template('material_outorin.html', message=message)
+            else:
+                message = "入库失败,请重新填写"
+                print("入库失败,请重新填写")
+                return render_template('material_outorin.html', message=message)
+                #   session.pop(user.name)
+    else:
+        for i in material_init:
+            materialCode = i[0]
+            materialName = i[1]
+            materialType = i[2]
+            materialFactory = i[8]
+            mDepartment = i[3]
+            m_price = i[4]
+        print("materialFactory:" + materialFactory)
+        return render_template('material_outorin.html',materialCode=materialCode,materialName=materialName,
+                               materialType=materialType,mDepartment=mDepartment,m_price=m_price,materialFactory=materialFactory)
 
 # xijiawei
 # 添加“product_management.py”蓝本

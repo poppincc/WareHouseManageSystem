@@ -3,6 +3,14 @@ import pymysql
 conn = pymysql.connect(host="127.0.0.1", port=3306, user="root", passwd="123456", db="test", charset="utf8")
 cur = conn.cursor()
 
+def select(table, conf):
+    sql = 'select * from ' + table + ' where 1 = 1'
+    for item in conf:
+        sql += item
+    print(sql)
+    cur.execute(sql)
+    result = cur.fetchall()
+    return result
 
 # 登录
 def loginCheck(name, pwd):
@@ -323,6 +331,94 @@ def insert_into_productChange(productCode,entryClerk,updateOfContent):
         # 提交到数据库执行
         conn.commit()
         print("语句已经提交")
+        return True
+        conn.close()
+    except:
+        conn.rollback()
+
+# lh1  查看物料
+def dao_show_material(materialCode, materialName, materialTime, materialType, materialFactory):
+    conf = []
+    # if materialTime == '':
+    #     conf.append(' and DATE_FORMAT(BehaviorTime,\'%Y%m%d\') >= \'20180102\'')
+    # else:
+    #     conf.append(' and DATE_FORMAT(BehaviorTime,\'%Y%m%d\') >= \'' + materialName + '\'')
+    if materialCode != '':
+        conf.append(' and materialCode = \'' + materialCode + '\'')
+    if materialName != '':
+        conf.append(' and materialName = \'' + materialName + '\'')
+    if materialType != '':
+        conf.append(' and type = ' + materialType)
+    if materialFactory != '':
+        conf.append(' and supplierFactory =\'' + materialFactory + '\'')
+
+    sql = 'select t1.materialCode,t1.materialName,t1.type,t1.department,t1.remainderAmount,t1.remainderMoney,' \
+          't1.supplierFactory,t2.isInOrOut,t1.price,t2.amount,t2.totalPrice,t2.documentNumber,t2.time,t2.personName' \
+          ' from materialofinfo as t1 INNER JOIN  materialofinout as t2  on t1.materialName = t2.materialName '
+    cur.execute(sql)
+    result = cur.fetchall()
+    return result
+    conn.close()
+
+# lh1  查看物料物料静态表
+def dao_show_materialinfo():
+    conf = []
+    result = select('materialofinfo',conf)
+    return result
+    conn.close()
+
+# lh1  查看物料出入库信息
+def dao_show_materialoutin():
+    conf = []
+    result = select('materialofinout',conf)
+    return result
+    conn.close()
+
+# lh1  点击物料自动补全
+def dao_show_materialoutorin(materialName):
+    conf = []
+    if materialName != '':
+        conf.append(' and materialName = \'' + materialName + '\'')
+    result = select('materialofinfo',conf)
+    return result
+    conn.close()
+
+# lh1  出库物料
+def dao_material_out(materialName):
+    sql = "delete from materialofinfo where materialName = '%s' "%( materialName )
+    # print("sql语句: "+sql)
+    sql2 = "delete from materialofinout where materialName = '%s' " %( materialName )
+    # print("sql语句: " + sql2)
+    try:
+        cur.execute(sql)
+        cur.execute(sql2)
+        conn.commit()
+        return True
+        conn.close()
+    except:
+        conn.rollback()
+
+# lh1  入库物料
+def dao_material_in(materialCode, materialName, materialType, m_price,materialFactory,mNum,mDepartment,mDcNum,materialTime,personName):
+    sql = "insert into materialofinfo(materialCode,materialName,type,department,price,supplierFactory) " \
+          "values('%s','%s','%s' ,'%s', '%lf', '%s')" % (materialCode, materialName, materialType, mDepartment, float(m_price), materialFactory)
+    # print("sql语句: "+sql)
+    sql2 = "insert into materialofinout(personName,materialCode,materialName,type,amount,department,price,totalprice,documentNumber,supplierFactory, isInOrOut,time)" \
+           " values('%s','%s','%s','%s', '%d','%s','%lf','%s','%s','%s',0,'%s')" % \
+           (personName,materialCode, materialName, materialType, int(mNum), mDepartment, float(m_price),float(m_price)*int(mNum), mDcNum, materialFactory,materialTime)
+    #更新余库存
+    sql3 = " update materialofinfo set remainderAmount = remainderAmount + '%d',remainderMoney = remainderMoney + '%lf'   where materialName = '%s'" % (int(mNum), float(m_price) * int(mNum), materialName)
+
+    sql4 = "select * from materialofinfo where materialName = '%s' " % (materialName)
+    print("sql4语句: " + sql4)
+    res = cur.execute(sql4)
+    print(res)
+    try:
+        if(res == 0):
+            cur.execute(sql)
+        cur.execute(sql2)
+        cur.execute(sql3)
+        conn.commit()
         return True
         conn.close()
     except:
