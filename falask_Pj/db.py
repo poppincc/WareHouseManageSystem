@@ -295,10 +295,47 @@ def show_allregister():
     return result
     conn.close()
 
+
 # xijiawei
 # 展示所有成品
-def show_allproducts():
-    sql = "select productCode,productType from productInfo;"
+def select_all_products():
+    sql = "select productCode,productType,client,price,profit from productInfo;"
+    cur.execute(sql)
+    result=cur.fetchall()
+    return result
+    conn.close()
+
+# xijiawei
+# 查询成品录入信息
+def select_productChangeByCode(productCode):
+    sql = "select entryClerk,updateOfContent,isUpdateOrAdd,entryDate from productChange where productCode='%s';" % (productCode)
+    cur.execute(sql)
+    result=cur.fetchall()
+    return result
+    conn.close()
+
+# xijiawei
+# 查询成品信息
+def select_productInfoByCode(productCode):
+    sql = "select productType,client,price,profit,totalCost,taxRate,materialCost,processCost,adminstrationCost,supplementaryCost,operatingCost from productInfo where productCode='%s';"%(productCode)
+    cur.execute(sql)
+    result=cur.fetchall()
+    return result
+    conn.close()
+
+# xijiawei
+# 查询成品物料组成
+def select_materialsOfProductByCode(productCode):
+    sql = "select materialCode,materialNum,materialPrice,materialCost,patchPoint,patchPrice,patchCost from materialsOfProduct where productCode='%s';"%(productCode)
+    cur.execute(sql)
+    result=cur.fetchall()
+    return result
+    conn.close()
+
+# xijiawei
+# 查询成品其他成本组成信息
+def select_otherCostsByCode(productCode):
+    sql = "select project,procCost,adminCost,suppleCost,operaCost from otherCosts where productCode='%s';"%(productCode)
     cur.execute(sql)
     result=cur.fetchall()
     return result
@@ -306,9 +343,41 @@ def show_allproducts():
 
 # xijiawei
 # 插入成品静态表
-def insert_into_productInfo(productcode,producttype,client,adminstrationCost,processCost,supplementaryCost,operatingCost,tax,remark):
-    sql = "insert into productInfo (productCode,productType,client,adminstrationCost,processCost,supplementaryCost,operatingCost,tax,remark)value('%s','%s','%s','%s','%s','%s','%s','%s','%s');" \
-          % (productcode,producttype,client,adminstrationCost,processCost,supplementaryCost,operatingCost,tax,remark)
+def insert_productInfo(productCode,productType,client,price,profit,totalCost,taxRate,materialCost,processCost,adminstrationCost,supplementaryCost,operatingCost):
+    sql = "insert into productInfo (productCode,productType,client,price,profit,totalCost,taxRate,materialCost,processCost,adminstrationCost,supplementaryCost,operatingCost)value('%s','%s','%s','%f','%f','%f','%f','%f','%f','%f','%f','%f');" \
+          % (productCode,productType,client,price,profit,totalCost,taxRate,materialCost,processCost,adminstrationCost,supplementaryCost,operatingCost)
+    try:
+        # 执行SQL语句
+        cur.execute(sql)
+        # 提交到数据库执行
+        conn.commit()
+        print("语句已经提交")
+        return True
+        conn.close()
+    except:
+        conn.rollback()
+
+# xijiawei
+# 插入成品物料组成表
+def insert_materialsOfProduct(productCode,materialCode,materialNum,materialPrice,materialCost,patchPoint,patchPrice,patchCost):
+    sql = "insert into materialsOfProduct (productCode,materialCode,materialNum,materialPrice,materialCost,patchPoint,patchPrice,patchCost)value('%s','%s','%d','%f','%f','%d','%f','%f');" \
+          % (productCode,materialCode,materialNum,materialPrice,materialCost,patchPoint,patchPrice,patchCost)
+    try:
+        # 执行SQL语句
+        cur.execute(sql)
+        # 提交到数据库执行
+        conn.commit()
+        print("语句已经提交")
+        return True
+        conn.close()
+    except:
+        conn.rollback()
+
+# xijiawei
+# 插入成品费用组成表
+def insert_otherCosts(productCode,project,procCost,adminCost,suppleCost,operaCost):
+    sql = "insert into otherCosts (productCode,project,procCost,adminCost,suppleCost,operaCost)value('%s','%s','%f','%f','%f','%f');" \
+          % (productCode,project,procCost,adminCost,suppleCost,operaCost)
     try:
         # 执行SQL语句
         cur.execute(sql)
@@ -322,9 +391,172 @@ def insert_into_productInfo(productcode,producttype,client,adminstrationCost,pro
 
 # xijiawei
 # 插入成品录入表
-def insert_into_productChange(productCode,entryClerk,updateOfContent):
-    sql = "insert into productInfo (productCode,entryClerk,updateOfContent)value('%s','%s','%s','%s');" \
-          % (productCode,entryClerk,updateOfContent)
+def insert_productChange(productCode,entryClerk,updateOfContent,entryDate):
+    # entryDate = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
+    sql = "insert into productChange (productCode,entryClerk,updateOfContent,entryDate)value('%s','%s','%s','%s');" \
+          % (productCode,entryClerk,updateOfContent,entryDate)
+    try:
+        # 执行SQL语句
+        cur.execute(sql)
+        # 提交到数据库执行
+        conn.commit()
+        print("语句已经提交")
+        return True
+        conn.close()
+    except:
+        conn.rollback()
+
+# xijiawei
+# 更新成品物料组成表
+def update_productInfo(productCode,productType,client,price,profit,totalCost,taxRate,materialCost,processCost,adminstrationCost,supplementaryCost,operatingCost):
+    sql = "update productInfo set productType='%s',client='%s',price='%f',profit='%f',totalCost='%f',taxRate='%f',materialCost='%f',processCost='%f',adminstrationCost='%f',supplementaryCost='%f',operatingCost='%f' where productCode='%s';" \
+          % (productType,client,price,profit,totalCost,taxRate,materialCost,processCost,adminstrationCost,supplementaryCost,operatingCost,productCode)
+    try:
+        # 执行SQL语句
+        cur.execute(sql)
+        # 提交到数据库执行
+        conn.commit()
+        print("语句已经提交")
+        return True
+        conn.close()
+    except:
+        conn.rollback()
+
+# xijiawei
+# 更新成品物料组成表
+def update_materialsOfProduct(productCode,materialCode,materialNum,materialPrice,materialCost,patchPoint,patchPrice,patchCost):
+    sql = "update materialsOfProduct set materialNum='%d',materialPrice='%f',materialCost='%f',patchPoint='%d',patchPrice='%f',patchCost='%f' where productCode='%s' and materialCode='%s';" \
+          % (materialNum,materialPrice,materialCost,patchPoint,patchPrice,patchCost,productCode,materialCode)
+    try:
+        # 执行SQL语句
+        cur.execute(sql)
+        # 提交到数据库执行
+        conn.commit()
+        print("语句已经提交")
+        return True
+        conn.close()
+    except:
+        conn.rollback()
+
+# xijiawei
+# 更新成品物料组成表
+def delete_materialsOfProduct(productCode):
+    sql = "delete from materialsOfProduct where productCode='%s';" \
+          % (productCode)
+    try:
+        # 执行SQL语句
+        cur.execute(sql)
+        # 提交到数据库执行
+        conn.commit()
+        print("语句已经提交")
+        return True
+        conn.close()
+    except:
+        conn.rollback()
+
+# xijiawei
+# 更新成品物料组成表
+def delete_otherCosts(productCode):
+    sql = "delete from otherCosts where productCode='%s';" \
+          % (productCode)
+    try:
+        # 执行SQL语句
+        cur.execute(sql)
+        # 提交到数据库执行
+        conn.commit()
+        print("语句已经提交")
+        return True
+        conn.close()
+    except:
+        conn.rollback()
+
+# xijiawei
+# 检查物料组成表
+def check_materialsOfProduct(productCode,materialCode):
+    sql = "select * from materialsOfProduct where productCode= '%s' and materialCode='%s';"% (productCode,materialCode)
+    cur.execute(sql)
+    result = cur.fetchall()
+    return result
+    conn.close()
+
+# xijiawei
+# 检查成品表
+def check_productInfo(productCode):
+    sql = "select * from productInfo where productCode= '%s';"% (productCode)
+    cur.execute(sql)
+    result = cur.fetchall()
+    return result
+    conn.close()
+
+# xijiawei
+# 创建物料组成临时表
+def create_materialsOfProduct_temp():
+    sql = "create table if not exists materialsOfProduct_temp(" \
+          "id int," \
+          "materialCode varchar(50) not null primary key);"
+    try:
+        cur.execute("drop table if exists materialsOfProduct_temp;")
+        conn.commit()
+
+        # 执行SQL语句
+        cur.execute(sql)
+        # 提交到数据库执行
+        conn.commit()
+        print("语句已经提交")
+        return True
+        conn.close()
+    except:
+        conn.rollback()
+
+# # xijiawei
+# # 检查物料组成临时表
+# def check_materialsOfProduct_temp(id):
+#     sql = "select * from materialsOfProduct_temp where id= '%s=d';"% (id)
+#     cur.execute(sql)
+#     result = cur.fetchall()
+#     return result
+#     conn.close()
+#
+# # xijiawei
+# # 检查物料组成临时表
+# def check_materialsOfProduct_temp(id,materialCode):
+#     sql = "select * from materialsOfProduct_temp where id='%d' materialCode= '%s';"% (id,materialCode)
+#     cur.execute(sql)
+#     result = cur.fetchall()
+#     return result
+#     conn.close()
+
+# xijiawei
+# 检查物料组成临时表
+def check_materialsOfProduct_temp(*param):
+    if len(param)==1:
+        sql = "select * from materialsOfProduct_temp where id= '%d';" % (param[0])
+    elif len(param)==2:
+        sql = "select * from materialsOfProduct_temp where not id='%d' and materialCode= '%s';"% (param[0],param[1])
+    cur.execute(sql)
+    result = cur.fetchall()
+    return result
+    conn.close()
+
+# xijiawei
+# 插入物料组成临时表
+def insert_materialsOfProduct_temp(id,materialCode):
+    sql = "insert into materialsOfProduct_temp (id,materialCode) value('%d','%s');"% (id,materialCode)
+    try:
+        # 执行SQL语句
+        cur.execute(sql)
+        # 提交到数据库执行
+        conn.commit()
+        print("语句已经提交")
+        return True
+        conn.close()
+    except:
+        conn.rollback()
+
+# xijiawei
+# 插入物料组成临时表
+def update_materialsOfProduct_temp(id,materialCode):
+    sql = "update materialsOfProduct_temp set materialCode='%s' where id='%d';"% (materialCode,id)
     try:
         # 执行SQL语句
         cur.execute(sql)

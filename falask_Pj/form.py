@@ -33,7 +33,7 @@ class ChangeForm(Form):
 # 添加成品表单
 class AddProductForm(Form):
     # 成品编号
-    productcode = StringField(
+    productCode = StringField(
         # 标签
         label="成品编号",
         # 验证器
@@ -49,7 +49,7 @@ class AddProductForm(Form):
         }
     )
     # 成品类型
-    producttype = StringField(
+    productType = StringField(
         # 标签
         label="成品类型",
         # 验证器
@@ -80,8 +80,77 @@ class AddProductForm(Form):
             "required": 'required'  # 表示输入框不能为空，并有提示信息
         }
     )
+    # 成品总成本
+    totalCost = StringField(
+        # 标签
+        label="成品成本",
+        # 验证器
+        validators=[
+            DataRequired('请输入成品成本')
+        ],
+        description="成品成本",
+        # 附加选项,会自动在前端判别
+        render_kw={
+            "id": "totalCost",
+            "class": "form-control",
+            "placeholder": "请输入成品成本",
+            "required": 'required',  # 表示输入框不能为空，并有提示信息
+            "readonly": 'true'
+        }
+    )
+    # 成品利润
+    profit = StringField(
+        # 标签
+        label="成品利润",
+        # 验证器
+        validators=[
+            DataRequired('请输入成品利润')
+        ],
+        description="成品利润",
+        # 附加选项,会自动在前端判别
+        render_kw={
+            "id": 'profit',
+            "class": "form-control",
+            "placeholder": "请输入成品利润",
+            "required": 'required'  # 表示输入框不能为空，并有提示信息
+        }
+    )
+    # 成品税率
+    taxRate = StringField(
+        # 标签
+        label="成品税率",
+        # 验证器
+        validators=[
+            DataRequired('请输入成品税率')
+        ],
+        description="成品税率",
+        # 附加选项,会自动在前端判别
+        render_kw={
+            "id": 'taxRate',
+            "class": "form-control",
+            "placeholder": "请输入成品税率",
+            "required": 'required'  # 表示输入框不能为空，并有提示信息
+        }
+    )
+    # 成品售价
+    price = StringField(
+        # 标签
+        label="成品售价",
+        # 验证器
+        validators=[
+            DataRequired('请输入成品售价')
+        ],
+        description="成品售价",
+        # 附加选项,会自动在前端判别
+        render_kw={
+            "id": 'price',
+            "class": "form-control",
+            "placeholder": "请输入成品售价",
+            "required": 'required'  # 表示输入框不能为空，并有提示信息
+        }
+    )
     # 录入员
-    entryclerk = StringField(
+    entryClerk = StringField(
         # 标签
         label="录入员",
         # 验证器
@@ -96,6 +165,7 @@ class AddProductForm(Form):
             "required": 'required'  # 表示输入框不能为空，并有提示信息
         }
     )
+
     # 物料编号
     materialCode = StringField(
         # 标签
@@ -178,8 +248,22 @@ class AddProductForm(Form):
     )
 
     # 提交
-    submit = SubmitField(
+    add_submit = SubmitField(
         label="添加",
+        render_kw={
+            "class": "btn btn-primary btn-block btn-flat"
+        }
+    )
+    # 保存
+    save_submit = SubmitField(
+        label="保存",
+        render_kw={
+            "class": "btn btn-primary btn-block btn-flat"
+        }
+    )
+    # 删除
+    delete_submit = SubmitField(
+        label="删除",
         render_kw={
             "class": "btn btn-primary btn-block btn-flat"
         }

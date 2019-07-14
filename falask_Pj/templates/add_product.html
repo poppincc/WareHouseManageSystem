@@ -103,8 +103,11 @@
                 <li>
                     <a href="{{ url_for("product_management.show_products") }}"> <i class="menu-icon fa fa-cogs"></i>成品列表</a>
                 </li>
-                <li>
+                <li class="active">
                     <a href="{{ url_for("product_management.add_product") }}"> <i class="menu-icon fa fa-th"></i>添加成品</a>
+                </li>
+                <li>
+                    <a href="{{ url_for("product_management.delete_products") }}"> <i class="menu-icon fa fa-th"></i>删除成品</a>
                 </li>
 
             </ul>
@@ -159,7 +162,7 @@
                 <div id="pay-invoice">
                     <div class="card-body">
                         <div class="card-title">
-                            <h3 class="text-center">增加人员</h3>
+                            <h3 class="text-center">成品信息编辑</h3>
                         </div>
                         <hr>
                         <form id="add_product_form" action="#" method="post" novalidate="novalidate">
@@ -184,18 +187,17 @@
                                 <div class="left">
                                     <label for="productcode" class="control-label mb-1">成品编码</label>  <!--for 属性规定 label 与哪个表单元素绑定。-->
                                     <div class="col-xs-12">
-                                        {{ form.productcode }}
+                                        {{ form.productCode }}
                                     </div>
                                 </div>
 
                                 <div class="right">
                                     <label class="control-label mb-1">成品型号</label>
                                     <div class="col-xs-12">
-                                        {{ form.producttype }}
+                                        {{ form.productType }}
                                     </div>
                                 </div>
                             </div>
-
 
                             <div class="row">
                                 <div class="left">
@@ -206,57 +208,118 @@
                                 </div>
 
                                 <div class="right">
+                                    <label class="control-label mb-1">售价</label>
+                                    <div class="col-xs-12">
+                                        {{ form.price }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="left">
+                                    <label class="control-label mb-1">利润</label>
+                                    <div class="col-xs-12">
+                                        {{ form.profit }}
+                                    </div>
+                                </div>
+
+                                <div class="right">
+                                    <label class="control-label mb-1">税率</label>
+                                    <div class="col-xs-12">
+                                        {{ form.taxRate }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="left">
+                                    <label class="control-label mb-1">总成本</label>
+                                    <div class="col-xs-12">
+                                        {{ form.totalCost }}
+                                    </div>
+                                </div>
+
+                                <div class="right">
                                     <label class="control-label mb-1">录入员姓名</label>
                                     <div class="col-xs-12">
-                                        {{ form.entryclerk }}
+                                        {{ form.entryClerk }}
                                     </div>
                                 </div>
                             </div>
 
                             <br/>                                                                          <!--br空行-->
 
-                            <div id="wrap" class="row">
-                                <div>
-                                    <label class="control-label mb-1">物料编码</label>
-                                    <div class="col-xs-12">
-                                        {{ form.materialCode }}
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="control-label mb-1">物料数量</label>
-                                    <div class="col-xs-12">
-                                        {{ form.materialNum }}
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="control-label mb-1">物料单价</label>
-                                    <div class="col-xs-12">
-                                        {{ form.materialPrice }}
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="control-label mb-1">贴片数量</label>
-                                    <div class="col-xs-12">
-                                        {{ form.patchPoint }}
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="control-label mb-1">贴片单价</label>
-                                    <div class="col-xs-12">
-                                        {{ form.patchPrice }}
-                                    </div>
-                                </div>
-                            </div>
+                                <table id="Costs" class="table table-striped table-bordered">
+                                    <!--<caption><h3>费用组成</h3></caption>-->                                    <!--h1标签控制一段文字的大小(从h1~h6)-->
+                                    <thead>
+                                    <tr align="center">
+                                        <th>材料成本</th>
+                                        <th>加工成本</th>
+                                        <th>管理成本</th>
+                                        <th>辅料成本</th>
+                                        <th>运营成本</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        {% if materialCost%}
+                                        <td id="materialCost">
+                                            {{ materialCost }}
+                                        </td>
+                                        {% else %}
+                                        <td id="materialCost">0.00</td>
+                                        {% endif %}
+
+                                        {% if processCost%}
+                                        <td id="processCost">
+                                            {{ processCost }}
+                                        </td>
+                                        {% else %}
+                                        <td id="processCost">0.00</td>
+                                        {% endif %}
+
+                                        {% if adminstrationCost%}
+                                        <td id="adminstrationCost">
+                                            {{ adminstrationCost }}
+                                        </td>
+                                        {% else %}
+                                        <td id="adminstrationCost">0.00</td>
+                                        {% endif %}
+
+                                        {% if supplementaryCost%}
+                                        <td id="supplementaryCost">
+                                            {{ supplementaryCost }}
+                                        </td>
+                                        {% else %}
+                                        <td id="supplementaryCost">0.00</td>
+                                        {% endif %}
+
+                                        {% if operatingCost%}
+                                        <td id="operatingCost">
+                                            {{ operatingCost }}
+                                        </td>
+                                        {% else %}
+                                        <td id="operatingCost">0.00</td>
+                                        {% endif %}
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            <br/>                                                                          <!--br空行-->
+
+                            <label>物料组成</label>
 
                             <div class="card-body">
                                 <!--button 默认的type是sumbit 要声明为type="button" -->
                                 <button onclick="addRow()" type="button"><img src="http://jianzhong5137.blog.163.com/blog/button.gif" alt=""/>添加物料</button>
+                                <button onclick="deleteRow()" type="button"><img src="http://jianzhong5137.blog.163.com/blog/button.gif" alt=""/>删除物料</button>
                                 <br/>
-                                <table id="materialofproduct" class="table table-striped table-bordered">
+                                <table id="materialOfProduct" class="table table-striped table-bordered">
                                 <!--<caption><h3>物料组成</h3></caption>-->                                    <!--h1标签控制一段文字的大小(从h1~h6)-->
                                 <br/>
                                     <thead>
                                         <tr align="center" bgcolor="deepskyblue">
+                                            <th width=20px><input type="checkbox" name="checkbox" value="checkbox" onclick="checkAll()"/></th>
                                             <th>物料编码</th>
                                             <th>物料数量</th>
                                             <th>物料单价</th>
@@ -265,29 +328,101 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    <!--<tr>
-                                        <td>三极管</td>
-                                        <td>23</td>
-                                        <td>2.00</td>
-                                        <td>11</td>
-                                        <td>0.05</td>
-                                    </tr>-->
-                                    <!--<tr>
-                                        <td><input type="text"/></td>
-                                        <td><input type="text"/></td>
-                                        <td><input type="text"/></td>
-                                        <td><input type="text"/></td>
-                                        <td><input type="text"/></td>
-                                    </tr>-->
-                                    {% for i in allclass %}
-                                            <tr>
-                                            <td>{{ i[0] }}</td>
-                                            <td>{{ i[1] }}</td>
-                                            <td>{{ i[1] }}</td>
-                                            <td>{{ i[1] }}</td>
-                                            <td>{{ i[1] }}</td>
-                                            </tr>
+                                    {% if materialOfProduct%}
+                                    {% for i in materialOfProduct %}
+                                        <tr class='tr_i'>
+                                            <td><input type='checkbox' name='checkbox' value='checkbox' /></td>
+                                            <td><input type='text' style='width:150px' class='materialCode'
+                                                       value={{ i[0] }}
+                                            /></td>
+                                            <td><input type='text' style='width:150px' class='materialOfProduct'
+                                                       value={{ i[1] }}
+                                            /></td>
+                                            <td><input type='text' style='width:150px' class='materialOfProduct'
+                                                       value={{ i[2] }}
+                                            /></td>
+                                            <td><input type='text' style='width:150px' class='materialOfProduct'
+                                                       value={{ i[4] }}
+                                            /></td>
+                                            <td><input type='text' style='width:150px' class='materialOfProduct'
+                                                       value={{ i[5] }}
+                                            /></td>
+                                        </tr>
                                     {% endfor %}
+                                    {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <br/>                                                                          <!--br空行-->
+
+                            <label>其他费用</label>
+
+                            <div class="card-body">
+                                <!--button 默认的type是sumbit 要声明为type="button" -->
+                                <button onclick="addRow2()" type="button"><img src="http://jianzhong5137.blog.163.com/blog/button.gif" alt=""/>增加条目</button>
+                                <button onclick="deleteRow2()" type="button"><img src="http://jianzhong5137.blog.163.com/blog/button.gif" alt=""/>删除条目</button>
+                                <!--<input type="button" name="Submit" value="新增" onclick="addRow()" />
+                                <input type="button" name="Submit2" value="删除" onclick="DeleteRow()" />
+                                <input type="button" name="Submit3" value="重置" onclick="window.location.reload()" />
+                                <input type="submit" name="Submit4" value="提交" onclick="GetTableData();return false;" />-->
+                                <br/>
+                                <table id="otherCosts" class="table table-striped table-bordered">
+                                <!--<caption><h3>物料组成</h3></caption>-->                                    <!--h1标签控制一段文字的大小(从h1~h6)-->
+                                <br/>
+                                    <thead>
+                                        <tr align="center" bgcolor="deepskyblue">
+                                            <th rowspan="2" width=20px><input type="checkbox" name="checkbox" value="checkbox" onclick="checkAll($(this))"/></th>
+                                            <th rowspan="2" width=20px>序号</th>
+                                            <th colspan="2">加工费</th>
+                                            <th colspan="2">管理费</th>
+                                            <th colspan="2">辅料费</th>
+                                            <th colspan="2">运营费</th>
+                                        </tr>
+                                        <tr align="center" bgcolor="deepskyblue">
+                                            <th>项目</th>
+                                            <th>费用</th>
+                                            <th>项目</th>
+                                            <th>费用</th>
+                                            <th>项目</th>
+                                            <th>费用</th>
+                                            <th>项目</th>
+                                            <th>费用</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% if otherCosts%}
+                                    {% for i in otherCosts %}
+                                        <tr>
+                                            <td><input type='checkbox' name='checkbox' value='checkbox' /></td>
+                                            <td></td>
+                                            <td><input type='text' style='width:80px' class='project' placeholder='项目名称'
+                                            value={{ i[0] }}
+                                            /></td>
+                                            <td><input type='text' style='width:80px' class='otherCosts' placeholder='加工费'
+                                            value={{ i[1] }}
+                                            /></td>
+                                            <td><input type='text' style='width:80px' class='project' placeholder='项目名称'
+                                            value={{ i[0] }}
+                                            /></td>
+                                            <td><input type='text' style='width:80px' class='otherCosts' placeholder='管理费'
+                                            value={{ i[2] }}
+                                            /></td>
+                                            <td><input type='text' style='width:80px' class='project' placeholder='项目名称'
+                                            value={{ i[0] }}
+                                            /></td>
+                                            <td><input type='text' style='width:80px' class='otherCosts' placeholder='辅料费'
+                                            value={{ i[3] }}
+                                            /></td>
+                                            <td><input type='text' style='width:80px' class='project' placeholder='项目名称'
+                                            value={{ i[0] }}
+                                            /></td>
+                                            <td><input type='text' style='width:80px' class='otherCosts' placeholder='运营费'
+                                            value={{ i[4] }}
+                                            /></td>
+                                        </tr>
+                                    {% endfor %}
+                                    {% endif %}
                                     </tbody>
                                 </table>
                             </div>
@@ -296,7 +431,14 @@
 
                             <div class="row">
                                 <div class="col-xs-12">
-                                    {{ form.submit }}
+                                    {{ form.save_submit }}
+                                    {{ form.csrf_token }}
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    {{ form.add_submit }}
                                     {{ form.csrf_token }}
                                 </div>
                             </div>
@@ -532,6 +674,7 @@ cript>
 </script>
 
 <!--jQuery-->
+<!--submit提交-->
 <!--//导入jquery模块-->
 <!--jquery是一个js包，为了就是减少js的代码量-->
 <script src="/static/jquery/jquery-2.1.4.min.js"></script>
@@ -540,77 +683,184 @@ cript>
         $("#add_product_form").submit(function(e)
         {
             e.preventDefault();
-            alert('提交');
 
-            var tableObj = document.getElementById("materialofproduct");
-            var rows=tableObj.rows;
-            console.log(rows);
-            for(var i=1;i<rows.length;i++) //从第二行开始获取表格数据，除去标题这行
-            {
-                for(var j=0;j<rows[i].cells.length;j++)
-                {
-                    console.log(rows[i].cells[j].innerHTML);
+            var materialOfProductArr =new Array();
+            var trList = $("#materialOfProduct tbody").children("tr");
+            console.log(trList);
+            for (var i=0;i<trList.length;i++) {
+                materialOfProductArr[i] =new Array();
+                var tdArr = trList.eq(i).find("td");
+                if(tdArr.eq(1).find("input").val()==""||tdArr.eq(2).find("input").val()==""||tdArr.eq(3).find("input").val()==""||tdArr.eq(4).find("input").val()==""||tdArr.eq(5).find("input").val()=="") {
+                    alert("请输入完整的物料信息！");
+                    return;
                 }
+                materialOfProductArr[i][0]=tdArr.eq(1).find("input").val();//物料编码
+                materialOfProductArr[i][1]=parseInt(tdArr.eq(2).find("input").val());//物料数量
+                materialOfProductArr[i][2] = parseFloat(tdArr.eq(3).find("input").val());//物料单价
+                materialOfProductArr[i][3] = materialOfProductArr[i][1]*materialOfProductArr[i][2];
+                materialOfProductArr[i][4]=parseInt(tdArr.eq(4).find("input").val());//贴片点数
+                materialOfProductArr[i][5] = parseFloat(tdArr.eq(5).find("input").val());//贴片单价
+                materialOfProductArr[i][6] = materialOfProductArr[i][4]*materialOfProductArr[i][5];
             }
+            console.log(materialOfProductArr);
 
+            /*费用组成*/
+            var otherCostsArr =new Array();
+            var trList = $("#otherCosts tbody").children("tr");
+            console.log(trList);
+            for (var i=0;i<trList.length;i++) {
+                otherCostsArr[i] =new Array();
+                var tdArr = trList.eq(i).find("td");
+                if(tdArr.eq(2).find("input").val()=="") {
+                    alert("请输入项目名称！");
+                    return;
+                }
+                otherCostsArr[i][0]=tdArr.eq(2).find("input").val();//项目名称
+                otherCostsArr[i][1]=parseInt(tdArr.eq(3).find("input").val());//加工费
+                otherCostsArr[i][2] = parseFloat(tdArr.eq(5).find("input").val());//管理费
+                otherCostsArr[i][3]=parseInt(tdArr.eq(7).find("input").val());//辅料费
+                otherCostsArr[i][4] = parseFloat(tdArr.eq(9).find("input").val());//运营费
+            }
+            console.log(otherCostsArr);
+
+            rows=document.getElementById("Costs").rows;
+            console.log($(this));
+            console.log($(this).serialize());
+            console.log($(this).serializeArray());
+            var formData=$(this).serializeArray();
+            console.log(formData[7]);
+            alert(formData[7]['value']);
+            if(formData[7]['value']==""){
+                alert("请输入录入员姓名！");
+                return;
+            }
+            var data={'productCode':formData[0]['value'],
+                'productType':formData[1]['value'],
+                'client':formData[2]['value'],
+                'price':parseFloat(formData[3]['value']),
+                'profit':parseFloat(formData[4]['value']),
+                'taxRate':parseFloat(formData[5]['value']),
+                'totalCost':parseFloat(formData[6]['value']),
+                'materialCost':parseFloat(rows[1].cells[0].innerHTML),
+                'processCost':parseFloat(rows[1].cells[1].innerHTML),
+                'adminstrationCost':parseFloat(rows[1].cells[2].innerHTML),
+                'supplementaryCost':parseFloat(rows[1].cells[3].innerHTML),
+                'operatingCost':parseFloat(rows[1].cells[4].innerHTML),
+                'entryClerk':parseFloat(formData[7]['value']),
+                'materialOfProduct':materialOfProductArr,
+                'otherCostsArr':otherCostsArr
+            };
+
+            var url=document.URL;
+            //alert(url);
+            if(url.indexOf("add_product")>=0){
             $.ajax({
                 url: "/add_product",
                 type: "POST",
                 dataType: "json",
-                data:$(this).serialize(),
+                //data:$(this).serialize(),
+                data:JSON.stringify(data),
+                contentType: 'application/json; charset=UTF-8',
                 success: function (callback) {
                     console.log(callback);
-                    if(callback.valueOf('ok')){
+                    //alert(callback['ok']);//不要用callback.valueOf('ok')
+                    if(callback['ok']){
                         window.location.href="/product_management";//跳转地址
+                    }else if(!callback['ok']){
+                        alert("数据库中已存在此成品！");
                     }
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     console.log(xhr.status);// 状态码
                     console.log(xhr.readyState);// 状态
                     console.log(textStatus);// 错误信息
-                    alert('错误');
+                    alert('返回值错误');
                 }
             });
-
+            }else if(url.indexOf("edit_product")>=0){
+                console.log(url.substring(url.indexOf("/edit_product"),url.length));
+            $.ajax({
+                url: url.substring(url.indexOf("/edit_product"),url.length),
+                type: "POST",
+                dataType: "json",
+                //data:$(this).serialize(),
+                data:JSON.stringify(data),
+                contentType: 'application/json; charset=UTF-8',
+                success: function (callback) {
+                    console.log(callback);
+                    if(callback['ok']){
+                        window.location.href="/product_management";//跳转地址
+                    }else if(!callback['ok']){
+                        alert("出错了！");
+                    }
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    console.log(xhr.status);// 状态码
+                    console.log(xhr.readyState);// 状态
+                    console.log(textStatus);// 错误信息
+                    alert('返回值错误');
+                }
+            });
+            }
         })
     })
 </script>
 
+
 <script src="/static/jquery/jquery-2.1.4.min.js"></script>
 <script  type="text/javascript">
+    /*表格增加行*/
     var rowCount = 1;
     var colCount=1;
     var html='';
     function addRow() {
-        //alert("点击");
         rowCount++;
         console.log(rowCount);
         console.log(colCount);
         for(var i=0;i<colCount-2;i++){
             html += '<td><input/></td>';
         }
-        //console.log($("#add_product_form").serialize());
-        //console.log(getFormData($("#add_product_form")));
-        var formData=getFormData($("#add_product_form"));
-        //console.log(formData['entryclerk']);
-        /*var rowTemplate = '<tr class="tr_'+rowCount+'">\n' +
-            '                                        <td>三极管</td>\n' +
-            '                                        <td>23</td>\n' +
-            '                                        <td>2.00</td>\n' +
-            '                                        <td>11</td>\n' +
-            '                                        <td>0.05</td>'+html+'</tr>';*/
-        var rowTemplate = '<tr class="tr_'+rowCount+'">\n' +
-            '                                        <td>'+formData['materialCode']+'</td>\n' +
-            '                                        <td>'+formData['materialNum']+'</td>\n' +
-            '                                        <td>'+formData['materialPrice']+'</td>\n' +
-            '                                        <td>'+formData['patchPoint']+'</td>\n' +
-            '                                        <td>'+formData['patchPrice']+'</td>'+html+'</tr>';
-        var tableHtml = $("#materialofproduct tbody").html();
+
+        var rowTemplate = "<tr class='tr_"+rowCount+"'>\n" +
+            "<td><input type='checkbox' name='checkbox' value='checkbox' /></td>" +
+            "<td><input type='text' style='width:150px' class='materialCode'/></td>" +
+            "<td><input type='text' style='width:150px' class='materialOfProduct' value='0'/></td>" +
+            "<td><input type='text' style='width:150px' class='materialOfProduct' value='0.00'/></td>" +
+            "<td><input type='text' style='width:150px' class='materialOfProduct' value='0'/></td>" +
+            "<td><input type='text' style='width:150px' class='materialOfProduct' value='0.00'/></td>"+html+"</tr>";
+        var tableHtml = $("#materialOfProduct tbody").html();
+        console.log(tableHtml);
         tableHtml += rowTemplate;
-        $("#materialofproduct tbody").html(tableHtml);
+        $("#materialOfProduct tbody").html(tableHtml);
         html='';
     }
 
+    /*表格增加行*/
+    function addRow2() {
+        var rowNum=$("#otherCosts tbody").children("tr").length;
+        rowNum++;
+        console.log(rowNum);
+        console.log(colCount);
+        for(var i=0;i<colCount-2;i++){
+            html += '<td><input/></td>';
+        }
+        var rowTemplate = "<tr class='tr_"+rowCount+"'>\n" +
+            "<td><input type='checkbox' name='checkbox' value='checkbox' /></td>" +
+            "<td>"+rowNum+"</td>\n" +
+            "<td><input type='text' style='width:80px' class='project' placeholder='项目名称'/></td>" +
+            "<td><input type='text' style='width:80px' class='otherCosts' placeholder='加工费'/></td>" +
+            "<td><input type='text' style='width:80px' class='project' placeholder='项目名称'/></td>" +
+            "<td><input type='text' style='width:80px' class='otherCosts' placeholder='管理费'/></td>" +
+            "<td><input type='text' style='width:80px' class='project' placeholder='项目名称'/></td>" +
+            "<td><input type='text' style='width:80px' class='otherCosts' placeholder='辅料费'/></td>" +
+            "<td><input type='text' style='width:80px' class='project' placeholder='项目名称'/></td>" +
+            "<td><input type='text' style='width:80px' class='otherCosts' placeholder='运营费'/></td>"+html+"</tr>";
+        var tableHtml = $("#otherCosts tbody").html();
+        tableHtml += rowTemplate;
+        $("#otherCosts tbody").html(tableHtml);
+        html='';
+    }
+    /*获取form表单数据*/
     function getFormData($form) {
         var unindexed_array = $form.serializeArray();
         var indexed_array = {};
@@ -622,107 +872,256 @@ cript>
         return indexed_array;
     }
 
-    $("#materialofproduct").on("dblclick","td",function(){
-        //alert("要编辑吗？");
-        var td = $(this);
-        var url=$("form").attr("action");
-        // 根据表格文本创建文本框 并加入表表中--文本框的样式自己调整
-        var text = td.text();
-        var txt = $("<input name='cell' type='text' class='form-control'>").val(text);
-        //var txt = $("<input name='cell' type='text'>").val(text);
-        txt.blur(function(){
-            // 失去焦点，保存值。于服务器交互自己再写,最好ajax
-            var newText = $(this).val(),
-                name=$(this).attr("name"),
-                input=$(this),
-                data={name:newText};
-            $.post(url,data,function () {
-                // 移除文本框,显示新值
-                input.remove();
-                td.text(newText);
+    /*删除表格行*/
+    function deleteRow() {
+        var table=document.getElementById("materialOfProduct");
+        for(var i=table.rows.length - 1; i>0;i--){
+            var chkOrder = table.rows[i].cells[0].firstChild;
+            if(chkOrder){
+                if(chkOrder.type = "CHECKBOX"){
+                    if(chkOrder.checked){
+                        //执行删除
+                        table.deleteRow(i);
+                    }
+                }
+            }
+        }
+    }
+    function deleteRow2() {
+        var table=document.getElementById("otherCosts");
+        for(var i=table.rows.length - 1; i>0;i--){
+            var chkOrder = table.rows[i].cells[0].firstChild;
+            if(chkOrder){
+                if(chkOrder.type = "CHECKBOX"){
+                    if(chkOrder.checked){
+                        //执行删除
+                        table.deleteRow(i);
+                    }
+                }
+            }
+        }
+    }
+    /*全部勾选*/
+    function checkAll() {
+        var mckeckbox=document.activeElement;
+        var table=document.activeElement.parentElement.parentElement.parentElement.parentElement;
+        console.log(mckeckbox);
+        console.log(table);
+        console.log(table.rows);
+        console.log(table.label);
+        console.log(table.tagName);
+        console.log(mckeckbox.checked);
+        if(table.tagName=="TABLE"){
+            if(mckeckbox.checked){
+                for(var i=1;i<table.rows.length;i++){
+                    var chkOrder = table.rows[i].cells[0].firstChild;
+                    if(chkOrder){
+                        if(chkOrder.type = "CHECKBOX"){
+                            chkOrder.checked=true;
+                            //chkOrder.setAttribute("checked", true);
+                        }
+                    }
+                }
+            }else if(!mckeckbox.checked){
+                for(var i=1;i<table.rows.length;i++){
+                    var chkOrder = table.rows[i].cells[0].firstChild;
+                    if(chkOrder){
+                        if(chkOrder.type = "CHECKBOX"){
+                            chkOrder.checked=false;
+                            //chkOrder.setAttribute("checked", false);
+                        }
+                    }
+                }
+            }
+        }
+
+        /*var table=$(this).closest('table');
+        console.log($(this));
+        console.log(table);
+        console.log(table.eq(0));
+        //console.log(trArr);
+        var trArr = table.children("tbody")[0].children("tr");
+        if($(this).checked)
+        for (var i=0;i<trArr.length;i++) {
+            var tdArr = trList.eq(i).find("td");
+            if(tdArr.eq(0).find("input").type=="checkbox"){
+                tdArr.eq(0).find("input").checked=true;
+            }
+        }
+        else {
+        if($(this).checked)
+        for (var i=0;i<trArr.length;i++) {
+            var tdArr = trList.eq(i).find("td");
+            if(tdArr.eq(0).find("input").type=="checkbox"){
+                tdArr.eq(0).find("input").checked=false;
+            }
+        }}*/
+    }
+
+    /*自动计算*/
+    $("#materialOfProduct").on('input', '.materialOfProduct', function () {
+        document.activeElement.setAttribute("value", $(this).val());
+        console.log(document.activeElement);
+
+        //统计表格数据
+        var sum=0;
+        var trList = $("#materialOfProduct tbody").children("tr");
+        console.log(trList);
+        for (var i=0;i<trList.length;i++) {
+            var tdArr = trList.eq(i).find("td");
+
+            var materialNum = parseFloat(tdArr.eq(2).find("input").val());//物料数量
+            var materialPrice = parseFloat(tdArr.eq(3).find("input").val());//物料单价
+            var patchPoint = parseFloat(tdArr.eq(4).find("input").val());//贴片点数
+            var patchPrice = parseFloat(tdArr.eq(5).find("input").val());//贴片单价
+
+            console.log(materialNum);
+            console.log(materialPrice);
+            console.log(patchPoint);
+            console.log(patchPrice);
+            if($.isNumeric(materialNum) && $.isNumeric(materialPrice)){
+                sum += materialNum*materialPrice;
+            }
+            if($.isNumeric(patchPoint) && $.isNumeric(patchPrice)){
+                sum += patchPoint*patchPrice;
+            }
+        }
+        console.log(sum);
+        $("#materialCost").text(sum.toFixed(2));
+
+        /*totalCost*/
+        //console.log($("#processCost").text());//不要使用$("#processCost").val()，input有value，而td获取其text
+        var totalCost = sum +
+            parseFloat($("#processCost").text())+
+            parseFloat($("#adminstrationCost").text())+
+            parseFloat($("#supplementaryCost").text())+
+            parseFloat($("#operatingCost").text());
+        console.log(totalCost);
+        console.log($("#totalCost"));
+        //$("#totalCost").find("input").val(totalCost);
+        $("#totalCost").val(totalCost.toFixed(2));
+
+        /*price*/
+        console.log($("#taxRate").val());
+        console.log($("#profit").val());
+        var price=(parseFloat($("#taxRate").val())+1)*(parseFloat($("#profit").val())+totalCost);//不要写成var price=($("#taxRate").val()+1)*($("#profit").val()+totalCost);
+        console.log($("#price"));
+        $("#price").val(price.toFixed(2));
+    });
+    $("#otherCosts").on('input', '.otherCosts', function () {
+        document.activeElement.setAttribute("value", $(this).val());
+        console.log(document.activeElement);
+
+        //统计表格数据
+        var sum=0;
+        var processCost=0,adminstrationCost=0,supplementaryCost=0,operatingCost=0;
+        var trList = $("#otherCosts tbody").children("tr");
+
+        console.log(trList);
+        for (var i=0;i<trList.length;i++) {
+            var tdArr = trList.eq(i).find("td");
+
+            var procesCost = parseFloat(tdArr.eq(3).find("input").val());//加工费
+            var adminsCost = parseFloat(tdArr.eq(5).find("input").val());//管理费
+            var suppleCost = parseFloat(tdArr.eq(7).find("input").val());//辅料费
+            var operatCost = parseFloat(tdArr.eq(9).find("input").val());//运营费
+
+            if($.isNumeric(procesCost)){
+                processCost+=procesCost;
+            }
+            if($.isNumeric(adminsCost)){
+                adminstrationCost+=adminsCost;
+            }
+            if($.isNumeric(suppleCost)){
+                supplementaryCost+=suppleCost;
+            }
+            if($.isNumeric(operatCost)){
+                operatingCost+=operatCost;
+            }
+        }
+        $("#processCost").text(processCost.toFixed(2));
+        $("#adminstrationCost").text(adminstrationCost.toFixed(2));
+        $("#supplementaryCost").text(supplementaryCost.toFixed(2));
+        $("#operatingCost").text(operatingCost.toFixed(2));
+
+        /*totalCost*/
+        var totalCost = parseFloat($("#materialCost").text()) +
+            processCost+
+            adminstrationCost+
+            supplementaryCost+
+            operatingCost;
+        console.log(totalCost);
+        $("#totalCost").find("input").val(totalCost);
+
+        /*price*/
+        console.log($("#taxRate").val());
+        console.log($("#profit").val());
+        var price=(parseFloat($("#taxRate").val())+1)*(parseFloat($("#profit").val())+totalCost);
+        console.log($("#price"));
+        $("#price").val(price);
+    });
+    /*数据绑定*/
+    $("#otherCosts").on('input', '.project', function () {
+        document.activeElement.setAttribute("value", $(this).val());
+        console.log(document.activeElement);
+
+        //统计表格数据
+        var sum=0;
+        var processCost=0,adminstrationCost=0,supplementaryCost=0,operatingCost=0;
+        var trList = $("#otherCosts tbody").children("tr");
+
+        var tdArr=$(this).parent().parent().find("td");
+        tdArr.eq(2).find("input").val($(this).val());
+        tdArr.eq(4).find("input").val($(this).val());
+        tdArr.eq(6).find("input").val($(this).val());
+        tdArr.eq(8).find("input").val($(this).val());
+
+        var tdElementsArr=document.activeElement.parentElement.parentElement.getElementsByTagName("td");
+        tdElementsArr[2].getElementsByTagName("input")[0].setAttribute("value", $(this).val());
+        tdElementsArr[4].getElementsByTagName("input")[0].setAttribute("value", $(this).val());
+        tdElementsArr[6].getElementsByTagName("input")[0].setAttribute("value", $(this).val());
+        tdElementsArr[8].getElementsByTagName("input")[0].setAttribute("value", $(this).val());
+        console.log(document.activeElement.parentElement.parentElement);
+    });
+    /*物料编码校验*/
+    $("#materialOfProduct").on('input', '.materialCode', function () {
+        document.activeElement.setAttribute("value", $(this).val());
+        console.log(document.activeElement);
+        console.log($(this).parent().parent().prevAll().length);//input -> td -> tr
+
+        //统计表格数据
+        $.ajax({
+                url: "/check_uniqueness",
+                type: "POST",
+                dataType: "json",
+                data:JSON.stringify({'id':$(this).parent().parent().prevAll().length,'materialCode':$(this).val()}),
+                contentType: 'application/json; charset=UTF-8',
+                success: function (callback) {
+                    console.log(callback['ok']);
+                    if(callback['ok']){alert("已存在此物料，请再检查！");}
+                    else if(!callback['ok']){}
+                    else {alert("出错了！");}
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    console.log(xhr.status);// 状态码
+                    console.log(xhr.readyState);// 状态
+                    console.log(textStatus);// 错误信息
+                    alert('返回值错误');
+                }
             });
-        });
-        td.text("");
-        td.append(txt);
     });
 
-    /*var inputItem;
-    var g_activeItem;
-    function changeToText(obj){
-        alert('文本');
-        if( obj && inputItem ) {
-            var str = " ";
-            if(inputItem.value != "") {
-                str = inputItem.value;
-            }
-            obj.innerText = str;
+    /*为表格添加序号*/
+    window.onload = function() {
+        var oTable = document.getElementById("otherCosts");
+        console.log(oTable.rows.length);
+        for ( var i = 1; i < oTable.rows.length; i++) {
+            console.log(i);
+            oTable.rows[i].cells[1].innerHTML = i-1;
+            if (i % 2 == 0)
+                oTable.rows[i].className = "ys01";
         }
-    }
-
-    function changeToEdit(obj){
-        alert('要编辑吗？');
-        if(event.srcElement.tagName.toLowerCase() == "td"){
-            inputItem=document.createElement("input");
-            inputItem.type="text";
-            inputItem.style.size="20";
-            inputItem.style.height="18px";
-            inputItem.style.fontSize="12px";
-        }
-        inputItem.value = obj.innerText;
-        obj.innerHTML = '';
-        obj.appendChild(inputItem);
-        inputItem.focus();
-        g_activeItem = obj;
-    }
-
-    //旧版使用document.attachEvent("onclick",function(){})
-    document.getElementById("materialofproduct").addEventListener("ondblclick",function(event){
-        if(event.srcElement.tagName.toLowerCase() == "td"){
-            changeToEdit(event.srcElement);
-        }
-    });*/
-
-    //旧版使用document.attachEvent("onclick",function(){})
-    /*var x = document.getElementById("myBtn");
-    if (x.addEventListener) {                    //所有主流浏览器，除了 IE 8 及更早 IE版本
-        x.addEventListener("click", myFunction);
-    } else if (x.attachEvent) {                  // IE 8 及更早 IE 版本
-        x.attachEvent("onclick", myFunction);
-    }*/
-    /*document.getElementById("materialofproduct").addEventListener("onclick",function(event){
-        if( event.srcElement.parentNode == g_activeItem || event.srcElement == g_activeItem ) {
-            return;
-        } else {
-            changeToText(g_activeItem);
-        }
-    });
-    document.createEvent("HTMLEvents").initEvent("ondblclick", false, false);
-    document.createEvent("HTMLEvents").initEvent("onclick", false, false);*/
-</script>
-
-<!--下拉框-->
-<script src="/static/jquery/jquery-2.1.4.min.js"></script>
-<script>
-    $(".selectd").on('focus', function (e) {
-        var optionTxts = ['','足够的市场机会','持续增强组织能力','增强每日管理能力','赢客工具的上线和使用'];
-        var value = $(this).text();
-        var htmlText = "<select id='sel_BizPlan' style='width:100%; '>";
-        for(var i=0;i<optionTxts.length;i++){
-            //for(var option of optionTxts){
-            var optionTex = optionTxts[i];
-            if(optionTex== value){
-                htmlText = htmlText+"<option selected = 'true'>"+optionTex+"</option>";
-                /*if(value == optionTex){
-                htmlText = htmlText+"<option selected = 'true'>"+optionTex+"</option>";
-                */
-            }else{
-                htmlText = htmlText+"<option>"+optionTex+"</option>";
-            }
-        };		htmlText = htmlText+"</select>";
-        $(this).parent().append(htmlText);
-        $(this).hide();
-        $("#sel_BizPlan").focus();
-    });
+    };
 </script>
 
 </body>
