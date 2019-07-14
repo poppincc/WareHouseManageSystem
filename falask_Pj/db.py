@@ -424,6 +424,22 @@ def update_productInfo(productCode,productType,client,price,profit,totalCost,tax
 
 # xijiawei
 # 更新成品物料组成表
+def delete_productInfo(productCode):
+    sql = "delete from productInfo where productCode='%s';" \
+          % (productCode)
+    try:
+        # 执行SQL语句
+        cur.execute(sql)
+        # 提交到数据库执行
+        conn.commit()
+        print("语句已经提交")
+        return True
+        conn.close()
+    except:
+        conn.rollback()
+
+# xijiawei
+# 更新成品物料组成表
 def update_materialsOfProduct(productCode,materialCode,materialNum,materialPrice,materialCost,patchPoint,patchPrice,patchCost):
     sql = "update materialsOfProduct set materialNum='%d',materialPrice='%f',materialCost='%f',patchPoint='%d',patchPrice='%f',patchCost='%f' where productCode='%s' and materialCode='%s';" \
           % (materialNum,materialPrice,materialCost,patchPoint,patchPrice,patchCost,productCode,materialCode)

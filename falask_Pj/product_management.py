@@ -143,6 +143,10 @@ def delete_products():
     addProductForm=AddProductForm()
     products = select_all_products()
     if request.method == "POST":
+        data = request.get_json()
+        productCodeArr = data['productCodeArr']  # 不要写成productCode=request.data["productcode"]
+        for productCode in productCodeArr:
+            delete_productInfo(productCode)
         return jsonify({'ok': True})
     elif request.method == "GET":
         return render_template('delete_products.html',form=addProductForm,products=products)
