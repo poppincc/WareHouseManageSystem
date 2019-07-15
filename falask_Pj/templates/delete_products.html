@@ -203,61 +203,44 @@
             {
                 e.preventDefault();
 
-                var data={'productCode':formData[0]['value'],
-                    'productType':formData[1]['value'],
-                    'client':formData[2]['value'],
-                    'price':parseFloat(formData[3]['value']),
-                    'profit':parseFloat(formData[4]['value']),
-                    'taxRate':parseFloat(formData[5]['value']),
-                    'totalCost':parseFloat(formData[6]['value']),
-                    'materialCost':parseFloat(rows[1].cells[0].innerHTML),
-                    'processCost':parseFloat(rows[1].cells[1].innerHTML),
-                    'adminstrationCost':parseFloat(rows[1].cells[2].innerHTML),
-                    'supplementaryCost':parseFloat(rows[1].cells[3].innerHTML),
-                    'operatingCost':parseFloat(rows[1].cells[4].innerHTML),
-                    'entryClerk':parseFloat(formData[7]['value']),
-                    'materialOfProduct':materialOfProductArr,
-                    'otherCostsArr':otherCostsArr
-                };
-
                 var table=document.getElementById("bootstrap-data-table");
-                for(var i=table.rows.length - 1; i>0;i--){
+                var productCodeArr=new Array();
+                for(var i=1; i<table.rows.length;i++){
                     var chkOrder = table.rows[i].cells[0].firstChild;
-                    if(chkOrder){
-                        if(chkOrder.type = "CHECKBOX"){
-                            if(chkOrder.checked){
-                                //执行删除
-                                table.deleteRow(i);
-                            }
+                    if(chkOrder.type = "CHECKBOX") {
+                        if (chkOrder.checked) {
+                            var cell = table.rows[i].cells[1].firstChild;
+                            console.log(cell);
+                            productCodeArr[i-1] = cell.innerHTML;
                         }
                     }
                 }
 
-                if(url.indexOf("add_product")>=0){
-                    $.ajax({
-                        url: "/add_product",
-                        type: "POST",
-                        dataType: "json",
-                        //data:$(this).serialize(),
-                        data:JSON.stringify(data),
-                        contentType: 'application/json; charset=UTF-8',
-                        success: function (callback) {
-                            console.log(callback);
-                            //alert(callback['ok']);//不要用callback.valueOf('ok')
-                            if(callback['ok']){
-                                window.location.href="/product_management";//跳转地址
-                            }else if(!callback['ok']){
-                                alert("数据库中已存在此成品！");
-                            }
-                        },
-                        error: function(xhr, textStatus, errorThrown) {
-                            console.log(xhr.status);// 状态码
-                            console.log(xhr.readyState);// 状态
-                            console.log(textStatus);// 错误信息
-                            alert('返回值错误');
+                var data={'productCodeArr':productCodeArr
+                };
+
+                $.ajax({
+                    url: "/delete_products",
+                    type: "POST",
+                    dataType: "json",
+                    //data:$(this).serialize(),
+                    data:JSON.stringify(data),
+                    contentType: 'application/json; charset=UTF-8',
+                    success: function (callback) {
+                        console.log(callback);
+                        if(callback['ok']){
+                            window.location.href="/product_management";//跳转地址
+                        }else if(!callback['ok']){
+                            alert("出错了！");
                         }
-                    });
-                }
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        console.log(xhr.status);// 状态码
+                        console.log(xhr.readyState);// 状态
+                        console.log(textStatus);// 错误信息
+                        alert('返回值错误');
+                    }
+                });
             })
         })
 

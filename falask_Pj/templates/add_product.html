@@ -1084,7 +1084,7 @@ cript>
         console.log(document.activeElement.parentElement.parentElement);
     });
     /*物料编码校验*/
-    $("#materialOfProduct").on('input', '.materialCode', function () {
+    /*$("#materialOfProduct").on('input', '.materialCode', function () {
         document.activeElement.setAttribute("value", $(this).val());
         console.log(document.activeElement);
         console.log($(this).parent().parent().prevAll().length);//input -> td -> tr
@@ -1100,6 +1100,70 @@ cript>
                     console.log(callback['ok']);
                     if(callback['ok']){alert("已存在此物料，请再检查！");}
                     else if(!callback['ok']){}
+                    else {alert("出错了！");}
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    console.log(xhr.status);// 状态码
+                    console.log(xhr.readyState);// 状态
+                    console.log(textStatus);// 错误信息
+                    alert('返回值错误');
+                }
+            });
+    });*/
+    /*物料编码校验*/
+    /*'focus'获得焦点，'blur'失去焦点，'input'输入*/
+    $("#materialOfProduct").on('blur', '.materialCode', function() {
+        console.log($(this));
+        console.log(document.activeElement);
+        //document.activeElement.setAttribute("value", $(this).val());
+        console.log($(this).parent().html());
+        var materialCode=$(this).val();
+
+        console.log($(this).parent().parent().html());
+        console.log($(this).parent().parent().prevAll().length);//input -> td -> tr，$(this).parent().parent().prevAll().length获取当前行数，$(this).parent().prevAll().length获取当前列数
+
+        var tdArr=$(this).parent().parent().find("td");
+        $(this).parent().html('<input class="materialCode" style="width:150px" type="text" value="'+$(this).val()+'">');
+        console.log(tdArr);
+        //var tdElementsArr=document.activeElement.parentElement.parentElement.getElementsByTagName("td");
+        /*tdArr.eq(3).find("input").val(6);
+        console.log("mark");
+        console.log(tdArr.eq(3).html());//<input class="materialOfProduct" style="width:150px" type="text" value="0.00">
+        console.log(tdArr.eq(3).innerHTML);//无效
+        console.log(tdArr.eq(3).find("input"));
+        console.log(tdArr.eq(3).find("input").html());
+        console.log(tdArr.eq(3).find("input").outerHTML);//无效
+        console.log(tdArr.eq(3).find("input").innerHTML);//无效
+        console.log(tdArr.eq(3).find("input").eq(0));
+        console.log(tdArr.eq(3).find("input").eq(0).outerHTML);//无效
+        console.log(tdArr.eq(3).find("input").eq(0).innerHTML);//无效
+        */
+
+        if($(this).val()=="")return;
+
+        $.ajax({
+                url: "/check_uniqueness",
+                type: "POST",
+                dataType: "json",
+                data:JSON.stringify({'id':$(this).parent().parent().prevAll().length,'materialCode':$(this).val()}),
+                contentType: 'application/json; charset=UTF-8',
+                success: function (callback) {
+                    console.log(callback);
+                    if(callback['ok']){
+                        var material=callback['material'];
+
+                        console.log(material[0]);
+                        console.log(material[0][1]);
+                        console.log(tdArr);
+                        tdArr.eq(3).find("input").val(material[0][1]);
+
+                        //console.log(tdElementsArr);
+                        //tdElementsArr[3].getElementsByTagName("input")[0].setAttribute("value", material[1]);
+                        tdArr.eq(3).html('<input class="materialOfProduct" style="width:150px" type="text" value="'+material[0][1]+'">');
+                        console.log(tdArr.eq(3).html());
+                        console.log(tdArr);
+                    }
+                    else if(!callback['ok']){alert("不存在此物料，请再检查！");}
                     else {alert("出错了！");}
                 },
                 error: function(xhr, textStatus, errorThrown) {

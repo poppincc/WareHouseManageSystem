@@ -505,6 +505,44 @@ def check_productInfo(productCode):
     conn.close()
 
 # xijiawei
+# 检查物料表
+def check_materialOfInfo(materialCode):
+    sql = "select * from materialOfInfo where materialCode= '%s';"% (materialCode)
+    cur.execute(sql)
+    result = cur.fetchall()
+    return result
+    conn.close()
+
+# xijiawei
+# 插入成品录入表
+def insert_materialOfInfo(materialCode, price, remainderAmount, supplierFactory):
+    # entryDate = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
+    sql = "insert into materialOfInfo (materialCode, price, remainderAmount, supplierFactory)value('%s','%f','%d','%s');" \
+          % (materialCode, price, remainderAmount, supplierFactory)
+    try:
+        # 执行SQL语句
+        cur.execute(sql)
+        # 提交到数据库执行
+        conn.commit()
+        print("语句已经提交")
+        return True
+        conn.close()
+    except:
+        conn.rollback()
+
+# xijiawei
+# 查询物料表
+def select_materialOfInfo(materialCode):
+    sql = "select materialCode, price, remainderAmount, supplierFactory from materialOfInfo where materialCode= '%s';"% (materialCode)
+    try:
+        cur.execute(sql)
+        result = cur.fetchall()
+        return result
+        conn.close()
+    except:
+        conn.rollback()
+
+# xijiawei
 # 创建物料组成临时表
 def create_materialsOfProduct_temp():
     sql = "create table if not exists materialsOfProduct_temp(" \
@@ -542,17 +580,66 @@ def create_materialsOfProduct_temp():
 #     return result
 #     conn.close()
 
+# # xijiawei
+# # 检查物料组成临时表
+# def check_materialsOfProduct_temp(*param):
+#     print(param)
+#     print(len(param))
+#     if len(param) == 1:
+#         print("参数个数为1：%s" % (param[0]))
+#         sql = "select * from materialsOfProduct_temp where id= '%d';" % (param[0])
+#     elif len(param) == 2:
+#         print("参数个数为1：%s; %s" % (param[0], param[1]))
+#         sql = "select * from materialsOfProduct_temp where not id='%d' and materialCode= '%s';" % (
+#             param[0], param[1])
+#     cur.execute(sql)
+#     result = cur.fetchall()
+#     return result
+#     conn.close()
+
 # xijiawei
 # 检查物料组成临时表
-def check_materialsOfProduct_temp(*param):
-    if len(param)==1:
-        sql = "select * from materialsOfProduct_temp where id= '%d';" % (param[0])
-    elif len(param)==2:
-        sql = "select * from materialsOfProduct_temp where not id='%d' and materialCode= '%s';"% (param[0],param[1])
-    cur.execute(sql)
-    result = cur.fetchall()
-    return result
-    conn.close()
+def check_materialsOfProduct_temp1(id):
+    print("1")
+    #conn.ping(reconnect=True)
+    conn = pymysql.connect(host="127.0.0.1", port=3306, user="root", passwd="123456", db="test", charset="utf8")
+    #sql = 'select * from materialsOfProduct_temp'
+    conn.ping(reconnect=True)
+    cur = conn.cursor()
+
+    try:
+        sql = "select * from materialsOfProduct_temp where id= '%d';" % (id)
+        print(sql)
+        cur.execute(sql)
+        result = cur.fetchall()
+        return result
+        # conn.close()
+    except:
+        print("出错1")
+        conn.rollback()
+
+# xijiawei
+# 检查物料组成临时表
+def check_materialsOfProduct_temp2(id,materialCode):
+    print("2")
+
+    conn = pymysql.connect(host="127.0.0.1", port=3306, user="root", passwd="123456", db="test", charset="utf8")
+    #sql = 'select * from materialsOfProduct_temp'
+    conn.ping(reconnect=True)
+    cur = conn.cursor()
+    #cur.execute(sql)
+    #conn.commit()
+
+    try:
+        sql = "select * from materialsOfProduct_temp where not(id='%d') and materialCode= '%s';" % (id, materialCode)
+        print(sql)
+        cur.execute(sql)
+        result = cur.fetchall()
+        return result
+        # conn.close()
+    except:
+        print("出错2")
+        conn.rollback()
 
 # xijiawei
 # 插入物料组成临时表

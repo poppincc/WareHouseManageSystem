@@ -191,15 +191,21 @@ def check_uniqueness():
         data = request.get_json()
         id=int(data['id'])
         materialCode = data['materialCode']  # 不要写成productCode=request.data["productcode"]
-        # print(check_materialsOfProduct_temp(materialCode))
-        if check_materialsOfProduct_temp(id):
-            if check_materialsOfProduct_temp(id,materialCode):
-                print("已存在此物料。")
-                return jsonify({'ok': True})
-            else:
-                update_materialsOfProduct_temp(id, materialCode)
-                return jsonify({'ok': False})
+
+        # if check_materialsOfProduct_temp1(id):
+        #     if check_materialsOfProduct_temp2(id,materialCode):
+        #         print("已存在此物料。")
+        #         return jsonify({'ok': True})
+        #     else:
+        #         update_materialsOfProduct_temp(id, materialCode)
+        #         return jsonify({'ok': False})
+        # else:
+        #     insert_materialsOfProduct_temp(id,materialCode)
+        #     return jsonify({'ok': False})
+
+        if check_materialOfInfo(materialCode):
+            material=select_materialOfInfo(materialCode)
+            return jsonify({'ok': True,'material':material})
         else:
-            insert_materialsOfProduct_temp(id,materialCode)
             return jsonify({'ok': False})
     else: return jsonify({'ok': -1})
