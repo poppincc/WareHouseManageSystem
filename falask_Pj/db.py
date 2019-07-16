@@ -435,7 +435,10 @@ def delete_productInfo(productCode):
         print("语句已经提交")
         return True
         conn.close()
-    except:
+    # except:
+    #     conn.rollback()
+    except Exception as e:
+        print("删除异常：",e)
         conn.rollback()
 
 # xijiawei
@@ -467,7 +470,10 @@ def delete_materialsOfProduct(productCode):
         print("语句已经提交")
         return True
         conn.close()
-    except:
+    # except:
+    #     conn.rollback()
+    except Exception as e:
+        print("删除异常：",e)
         conn.rollback()
 
 # xijiawei
@@ -483,7 +489,10 @@ def delete_otherCosts(productCode):
         print("语句已经提交")
         return True
         conn.close()
-    except:
+    # except:
+    #     conn.rollback()
+    except Exception as e:
+        print("删除异常：",e)
         conn.rollback()
 
 # xijiawei

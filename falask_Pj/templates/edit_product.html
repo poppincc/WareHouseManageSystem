@@ -103,9 +103,19 @@
                 <li>
                     <a href="{{ url_for("product_management.show_products") }}"> <i class="menu-icon fa fa-cogs"></i>成品列表</a>
                 </li>
+
+                {% if setting==0%}
                 <li class="active">
                     <a href="{{ url_for("product_management.add_product") }}"> <i class="menu-icon fa fa-th"></i>添加成品</a>
                 </li>
+                {% elif setting==1 and productCode%}
+                <li>
+                    <a href="{{ url_for("product_management.add_product") }}"> <i class="menu-icon fa fa-th"></i>添加成品</a>
+                </li>
+                <li class="active">
+                    <a href="{{ url_for("product_management.edit_product",productCode=productCode) }}"> <i class="menu-icon fa fa-th"></i>编辑成品</a>
+                </li>
+                {% endif %}
                 <li>
                     <a href="{{ url_for("product_management.delete_products") }}"> <i class="menu-icon fa fa-th"></i>删除成品</a>
                 </li>
@@ -429,19 +439,23 @@
 
                             <br/>                                                                          <!--br空行-->
 
+                                    {% if setting==1%}
                             <div class="row">
                                 <div class="col-xs-12">
                                     {{ form.save_submit }}
                                     {{ form.csrf_token }}
                                 </div>
                             </div>
-                            <br/>
+
+                                    {% elif setting==0%}
                             <div class="row">
                                 <div class="col-xs-12">
                                     {{ form.add_submit }}
                                     {{ form.csrf_token }}
                                 </div>
                             </div>
+
+                                    {% endif%}
                         </form>
                     </div>
                 </div>
@@ -729,7 +743,7 @@ cript>
             console.log($(this).serializeArray());
             var formData=$(this).serializeArray();
             console.log(formData[7]);
-            alert(formData[7]['value']);
+            //alert(formData[7]['value']);
             if(formData[7]['value']==""){
                 alert("请输入录入员姓名！");
                 return;
@@ -1051,7 +1065,8 @@ cript>
             supplementaryCost+
             operatingCost;
         console.log(totalCost);
-        $("#totalCost").find("input").val(totalCost);
+        //$("#totalCost").find("input").val(totalCost);
+        $("#totalCost").val(totalCost);
 
         /*price*/
         console.log($("#taxRate").val());
@@ -1162,6 +1177,8 @@ cript>
                         tdArr.eq(3).html('<input class="materialOfProduct" style="width:150px" type="text" value="'+material[0][1]+'">');
                         console.log(tdArr.eq(3).html());
                         console.log(tdArr);
+
+                        Calculate();
                     }
                     else if(!callback['ok']){alert("不存在此物料，请再检查！");}
                     else {alert("出错了！");}
@@ -1174,6 +1191,85 @@ cript>
                 }
             });
     });
+    function Calculate(){
+        //统计materialCost表格数据
+        var materialCost=0;
+        var trList = $("#materialOfProduct tbody").children("tr");
+        console.log(trList);
+        for (var i=0;i<trList.length;i++) {
+            var tdArr = trList.eq(i).find("td");
+
+            var materialNum = parseFloat(tdArr.eq(2).find("input").val());//物料数量
+            var materialPrice = parseFloat(tdArr.eq(3).find("input").val());//物料单价
+            var patchPoint = parseFloat(tdArr.eq(4).find("input").val());//贴片点数
+            var patchPrice = parseFloat(tdArr.eq(5).find("input").val());//贴片单价
+
+            console.log(materialNum);
+            console.log(materialPrice);
+            console.log(patchPoint);
+            console.log(patchPrice);
+            if($.isNumeric(materialNum) && $.isNumeric(materialPrice)){
+                materialCost += materialNum*materialPrice;
+            }
+            if($.isNumeric(patchPoint) && $.isNumeric(patchPrice)){
+                materialCost += patchPoint*patchPrice;
+            }
+        }
+        console.log(materialCost);
+        $("#materialCost").text(materialCost.toFixed(2));
+
+        //统计otherCosts表格数据
+        var sum=0;
+        var processCost=0,adminstrationCost=0,supplementaryCost=0,operatingCost=0;
+        var trList = $("#otherCosts tbody").children("tr");
+
+        console.log(trList);
+        for (var i=0;i<trList.length;i++) {
+            var tdArr = trList.eq(i).find("td");
+
+            var procesCost = parseFloat(tdArr.eq(3).find("input").val());//加工费
+            var adminsCost = parseFloat(tdArr.eq(5).find("input").val());//管理费
+            var suppleCost = parseFloat(tdArr.eq(7).find("input").val());//辅料费
+            var operatCost = parseFloat(tdArr.eq(9).find("input").val());//运营费
+
+            if($.isNumeric(procesCost)){
+                processCost+=procesCost;
+            }
+            if($.isNumeric(adminsCost)){
+                adminstrationCost+=adminsCost;
+            }
+            if($.isNumeric(suppleCost)){
+                supplementaryCost+=suppleCost;
+            }
+            if($.isNumeric(operatCost)){
+                operatingCost+=operatCost;
+            }
+        }
+        $("#processCost").text(processCost.toFixed(2));
+        $("#adminstrationCost").text(adminstrationCost.toFixed(2));
+        $("#supplementaryCost").text(supplementaryCost.toFixed(2));
+        $("#operatingCost").text(operatingCost.toFixed(2));
+
+        /*totalCost*/
+        var totalCost = materialCost +
+            processCost+
+            adminstrationCost+
+            supplementaryCost+
+            operatingCost;
+        console.log(totalCost);
+        //$("#totalCost").find("input").val(totalCost);
+        $("#totalCost").val(totalCost);
+        console.log($("#totalCost"));
+
+        /*price*/
+        console.log($("#taxRate").val());
+        console.log($("#profit").val());
+        var price=0;
+        if($.isNumeric(parseFloat($("#taxRate").val())) && $.isNumeric(parseFloat($("#profit").val())))
+            price=(parseFloat($("#taxRate").val())+1)*(parseFloat($("#profit").val())+totalCost);
+        console.log($("#price"));
+        $("#price").val(price);
+    };
 
     /*为表格添加序号*/
     window.onload = function() {
